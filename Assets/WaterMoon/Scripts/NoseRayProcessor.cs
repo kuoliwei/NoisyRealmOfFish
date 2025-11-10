@@ -93,6 +93,20 @@ public class NoseRayProcessor : MonoBehaviour
 
     private void Update()
     {
+        // ---- 這段每幀都要跑（不受 isInsideRange 限制）----
+        if (currentMode == SpawnMode.Fish)
+        {
+            PruneTimedOutFish(); // 新增的方法，見下方
+                                 // 若完全沒新資料超過 loseTrackSeconds，保底全部清空
+            if (Time.time - lastReceivedTime > loseTrackSeconds)
+            {
+                if (fishSpawnerUI != null)
+                    fishSpawnerUI.ClearAll();
+                latestNoseByPerson.Clear();
+                lastSeenByPerson.Clear();
+            }
+        }
+        // ------------------------------------------------------
         bool hasRecentData = (Time.time - lastReceivedTime) <= loseTrackThreshold;
         isInsideRange = hasRecentData;
 
@@ -167,6 +181,15 @@ public class NoseRayProcessor : MonoBehaviour
         if (fishSpawnerUI == null || targetCanvas == null)
             return;
 
+        // === 修正重點：完全沒人時強制清空 ===
+        if (latestNoseByPerson.Count == 0)
+        {
+            fishSpawnerUI.ClearAll();
+            lastSeenByPerson.Clear();
+            return;
+        }
+        // === End ===
+
         // 移除失聯者
         var toRemove = new List<int>();
         foreach (var kv in lastSeenByPerson)
@@ -200,6 +223,26 @@ public class NoseRayProcessor : MonoBehaviour
             fishSpawnerUI.SpawnOrUpdateFish(personId, canvasPos);
         }
     }
+    private void PruneTimedOutFish()
+    {
+        if (fishSpawnerUI == null) return;
+
+        // 依最後看見時間逐一淘汰
+        var toRemove = new List<int>();
+        foreach (var kv in lastSeenByPerson)
+        {
+            if (Time.time - kv.Value > loseTrackSeconds)
+                toRemove.Add(kv.Key);
+        }
+        for (int i = 0; i < toRemove.Count; i++)
+        {
+            int id = toRemove[i];
+            lastSeenByPerson.Remove(id);
+            latestNoseByPerson.Remove(id);
+            fishSpawnerUI.DespawnFish(id);
+        }
+    }
+
 
     // === 新增區塊：模仿星星的詩句生成 ===
     private void GenerateVerses()
