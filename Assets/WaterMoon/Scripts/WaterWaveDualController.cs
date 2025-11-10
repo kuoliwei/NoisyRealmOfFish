@@ -78,7 +78,7 @@ public class WaterWaveDualController : MonoBehaviour
     void Start()
     {
         RandomizeWaves();
-        UpdateReflectionScale();
+        //UpdateReflectionScale();
     }
 
     void Update()

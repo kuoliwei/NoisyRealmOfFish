@@ -46,9 +46,12 @@ public class SkeletonDataProcessor : MonoBehaviour
     private readonly Dictionary<int, HandSmoother> leftSmoothers = new();
     private readonly Dictionary<int, HandSmoother> rightSmoothers = new();
 
+    // 每人鼻子獨立平滑器
+    private readonly Dictionary<int, HandSmoother> noseSmoothers = new();
+
     // 鼻子射線事件
     [System.Serializable]
-    public class NoseHitEvent : UnityEvent<List<Vector2>> { }
+    public class NoseHitEvent : UnityEvent<List<NoseHitData>> { }
 
     [Header("鼻子射線事件")]
     public NoseHitEvent OnNoseHitProcessed = new();
@@ -71,13 +74,31 @@ public class SkeletonDataProcessor : MonoBehaviour
 
     [SerializeField] Vector2[] startPositions;
 
+    [System.Serializable]
+    public struct NoseHitData
+    {
+        public int personId;
+        public Vector2 uv;
+        public NoseHitData(int personId, Vector2 uv)
+        {
+            this.personId = personId;
+            this.uv = uv;
+        }
+    }
     private void Update()
     {
-        // 測試：按 S 鍵生成一顆星星
-        if (Input.GetKey(KeyCode.S))
-        {
-            OnNoseHitProcessed?.Invoke(startPositions.ToList<Vector2>());
-        }
+        //// 測試：按 S 鍵生成一顆星星
+        //if (Input.GetKey(KeyCode.S))
+        //{
+        //    var demoList = new List<NoseHitData>();
+        //    // 給一個假 personId=0
+        //    for (int i = 0; i < startPositions.Length; i++)
+        //    {
+        //        demoList.Add(new NoseHitData(0, startPositions[i]));
+        //    }
+
+        //    OnNoseHitProcessed?.Invoke(demoList);
+        //}
     }
 
     public void HandleSkeletonFrame(FrameSample frame)
@@ -86,7 +107,7 @@ public class SkeletonDataProcessor : MonoBehaviour
             return;
 
         var seen = new HashSet<int>();
-        var noseHitList = new List<Vector2>();
+        var noseHitList = new List<NoseHitData>();
         var handHitList = new List<Vector2>();
 
         _recvFramesThisSec++;
@@ -120,29 +141,29 @@ public class SkeletonDataProcessor : MonoBehaviour
                 vis = CreateVisualForPerson(p);
                 visuals.Add(p, vis);
             }
-            // [新增] 鼻子射線：固定往 Z+ 射出
+            // === 鼻子射線（固定方向） ===
             Transform nose = vis.joints[(int)JointId.Nose];
-            //Debug.Log($"nose存在{nose}");
             if (nose != null)
             {
-                //Vector3 dir = skeletonParent != null
-                //    ? skeletonParent.TransformDirection(Vector3.forward)
-                //    : Vector3.forward;
+                if (!noseSmoothers.TryGetValue(p, out var noseSm))
+                    noseSmoothers[p] = noseSm = new HandSmoother(0.2f, 0.002f);
 
                 Vector3 dir = skeletonParent != null
                     ? skeletonParent.TransformDirection(Vector3.back)
                     : Vector3.back;
+
                 Ray ray = new Ray(nose.position, dir.normalized);
                 if (Physics.Raycast(ray, out RaycastHit hit, rayLength) && hit.collider == screenCollider)
                 {
-                    noseHitList.Add(hit.textureCoord);
+                    Vector2 uvRaw = hit.textureCoord;
+                    Vector2 uvSmoothed = noseSm.Smooth(uvRaw);
+                    noseHitList.Add(new NoseHitData(p, uvSmoothed));
+
                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow, 0.1f);
-                    //Debug.Log($"繪製鼻子射線在位置{ray.origin}");
                 }
                 else
                 {
                     Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.red, 0.1f);
-                    //Debug.Log($"繪製鼻子射線在位置{ray.origin}");
                 }
             }
             // 【新增】確保每個人都有獨立 smoother
@@ -260,6 +281,7 @@ public class SkeletonDataProcessor : MonoBehaviour
             // 【新增】人物離場時清除其 smoother
             leftSmoothers.Remove(id);
             rightSmoothers.Remove(id);
+            noseSmoothers.Remove(id);
         }
     }
     // 單一螢幕版本：不再回傳 quads，只收打到 screenCollider 的 UV

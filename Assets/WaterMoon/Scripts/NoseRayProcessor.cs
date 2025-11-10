@@ -1,16 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static SkeletonDataProcessor;
 
 public class NoseRayProcessor : MonoBehaviour
 {
+    public enum SpawnMode { Stars, Fish }
+
+    [Header("Fish spawner")]
+    [SerializeField] private FishSpawnerUI fishSpawnerUI;
+
+    [Header("Fish settings")]
+    [SerializeField] private float loseTrackSeconds = 0.2f; // 一人一魚失聯多久後移除
+
+    // 一人一魚暫存
+    private readonly Dictionary<int, Vector2> latestNoseByPerson = new();
+    private readonly Dictionary<int, float> lastSeenByPerson = new();
+
+    [SerializeField] private SpawnMode currentMode = SpawnMode.Stars;
+
     [Header("狀態設定")]
     [SerializeField] private float loseTrackThreshold = 0.2f;
-    [SerializeField] private float idleResetTime = 120f; // 超過這秒數無人偵測就重置
+    [SerializeField] private float idleResetTime = 120f;
 
     [Header("Star spawner")]
     [SerializeField] private StarSpawnerUI starSpawnerUI;
     [SerializeField] private WaterWaveDualController waterWaveController;
-    [SerializeField] private ExperienceFlowController flowController; // 引用流程控制器
+    [SerializeField] private ExperienceFlowController flowController;
 
     [Header("Range")]
     [SerializeField] private float range = 150f;
@@ -32,11 +47,19 @@ public class NoseRayProcessor : MonoBehaviour
     private bool isInsideRange = false;
     private bool lastState = false;
     private float lastReceivedTime = -999f;
-    private List<Vector2> latestNoseHits = new();
+    private List<NoseHitData> latestNoseHits = new();
     private float spawnTimer = 0f;
-    private float lastActiveTime = -999f;    // 記錄最後一次有效體驗的時間
+    private float lastActiveTime = -999f;
     private Canvas targetCanvas;
     private Camera uiCamera;
+
+    // === 新增區塊：魚模式詩句生成設定 ===
+    [Header("Verse (Fish Mode) Settings")]
+    [SerializeField] private float verseRange = 150f;   // 圓形隨機範圍半徑
+    [SerializeField] private float verseOffsetY = 150f; // 魚上方中心距離
+    [SerializeField] private float verseSpeed = 0.5f;   // 每秒幾句
+    private float verseSpawnTimer = 0f;
+    // === End ===
 
     private void Start()
     {
@@ -48,14 +71,23 @@ public class NoseRayProcessor : MonoBehaviour
         lastActiveTime = Time.time;
     }
 
-    public void OnReceiveNoseHits(List<Vector2> noseHitList)
+    public void OnReceiveNoseHits(List<NoseHitData> noseHitList)
     {
         if (noseHitList != null && noseHitList.Count > 0)
         {
             lastReceivedTime = Time.time;
             latestNoseHits.Clear();
             latestNoseHits.AddRange(noseHitList);
-            lastActiveTime = Time.time; // 有效資料時更新活動時間
+
+            // 同步 Fish 的人員資料
+            for (int i = 0; i < noseHitList.Count; i++)
+            {
+                var d = noseHitList[i];
+                latestNoseByPerson[d.personId] = d.uv;
+                lastSeenByPerson[d.personId] = Time.time;
+            }
+
+            lastActiveTime = Time.time;
         }
     }
 
@@ -71,18 +103,7 @@ public class NoseRayProcessor : MonoBehaviour
             lastState = isInsideRange;
         }
 
-        // 超過 idleResetTime 沒人 → 自動回到初始狀態
-        if (Time.time - lastActiveTime > idleResetTime)
-        {
-            if (enableDebug)
-                Debug.Log($"超過 {idleResetTime} 秒無人體驗，自動重置");
-            if (flowController != null)
-                flowController.InitializeExperience();
-            lastActiveTime = Time.time; // 重置計時避免重複觸發
-            return;
-        }
-
-        if (isInsideRange && latestNoseHits.Count > 0)
+        if (currentMode == SpawnMode.Stars && isInsideRange && latestNoseHits.Count > 0)
         {
             spawnTimer += Time.deltaTime;
             float interval = 1f / Mathf.Max(speed, 0.01f);
@@ -92,6 +113,20 @@ public class NoseRayProcessor : MonoBehaviour
                 GenerateStars();
             }
         }
+        else if (currentMode == SpawnMode.Fish && isInsideRange)
+        {
+            UpdateFishPositions();
+
+            // === 新增區塊：魚模式詩句生成 ===
+            verseSpawnTimer += Time.deltaTime;
+            float interval = 1f / Mathf.Max(verseSpeed, 0.01f);
+            while (verseSpawnTimer >= interval)
+            {
+                verseSpawnTimer -= interval;
+                GenerateVerses();
+            }
+            // === End ===
+        }
     }
 
     private void GenerateStars()
@@ -99,13 +134,12 @@ public class NoseRayProcessor : MonoBehaviour
         if (starSpawnerUI == null || targetCanvas == null)
             return;
 
-        // 若體驗已完成，就不再生成星星
         if (waterWaveController != null && waterWaveController.IsExperienceCompleted())
             return;
 
-        foreach (var uv in latestNoseHits)
+        foreach (var d in latestNoseHits)
         {
-            Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
+            Vector2 screenCenter = new Vector2(d.uv.x * Screen.width, d.uv.y * Screen.height);
             Vector2 offset = Random.insideUnitCircle * range;
             Vector2 screenPos = screenCenter + offset;
 
@@ -127,4 +161,72 @@ public class NoseRayProcessor : MonoBehaviour
             starSpawnerUI.SpawnStar(canvasPos, baseColor, crossColor, scale);
         }
     }
+
+    private void UpdateFishPositions()
+    {
+        if (fishSpawnerUI == null || targetCanvas == null)
+            return;
+
+        // 移除失聯者
+        var toRemove = new List<int>();
+        foreach (var kv in lastSeenByPerson)
+        {
+            if (Time.time - kv.Value > loseTrackSeconds)
+                toRemove.Add(kv.Key);
+        }
+        for (int i = 0; i < toRemove.Count; i++)
+        {
+            int id = toRemove[i];
+            lastSeenByPerson.Remove(id);
+            latestNoseByPerson.Remove(id);
+            fishSpawnerUI.DespawnFish(id);
+        }
+
+        // 逐人更新魚位置
+        foreach (var kv in latestNoseByPerson)
+        {
+            int personId = kv.Key;
+            Vector2 uv = kv.Value;
+
+            Vector2 screenPos = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                fishSpawnerUI.ParentRect,
+                screenPos,
+                targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
+                out canvasPos
+            );
+
+            fishSpawnerUI.SpawnOrUpdateFish(personId, canvasPos);
+        }
+    }
+
+    // === 新增區塊：模仿星星的詩句生成 ===
+    private void GenerateVerses()
+    {
+        if (fishSpawnerUI == null || targetCanvas == null)
+            return;
+
+        foreach (var kv in latestNoseByPerson)
+        {
+            Vector2 uv = kv.Value;
+            Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
+
+            // 魚上方區域中心 + 隨機圓形偏移
+            Vector2 offset = Random.insideUnitCircle * verseRange;
+            Vector2 screenPos = screenCenter + offset + new Vector2(0f, verseOffsetY);
+
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                fishSpawnerUI.ParentRect,
+                screenPos,
+                targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
+                out canvasPos
+            );
+
+            // 呼叫 FishSpawnerUI 生成詩句（獨立物件，顯示後自動消失）
+            fishSpawnerUI.SpawnVerse(canvasPos);
+        }
+    }
+    // === End ===
 }

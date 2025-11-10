@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a09ab5fc64402d49b12d170a7577986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ndiName: 230719-NB (NoisyRealm_BG)
+  _ndiName: DESKTOP-7FPDCHJ (NoisyRealm_BG)
   _targetTexture: {fileID: 8400000, guid: dd86893d8c0ed654e9e3f61410d73a00, type: 2}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: _MainTex
