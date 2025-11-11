@@ -105,8 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3b862ef4135374f8e99064bad9851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: 0.8
-  maxScale: 1.2
-  frequency: 0.1
-  alphaAtMin: 0.3
+  minScale: 0.5
+  maxScale: 2
+  frequency: 0.05
+  alphaAtMin: 0.1
   alphaAtMax: 1

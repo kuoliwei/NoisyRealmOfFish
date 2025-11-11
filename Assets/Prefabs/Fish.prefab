@@ -98,12 +98,12 @@ MonoBehaviour:
   targetImage: {fileID: 5359044036423336552}
   chromaKeyShader: {fileID: 4800000, guid: e6fb4340f6b8a70429f0c7a1b9d65c36, type: 3}
   fishVideos:
-  - {fileID: 32900000, guid: ec03713b894bf8b47857201f4fddb47e, type: 3}
-  - {fileID: 32900000, guid: 3e62036f73d44ae4bb132fe2fc3cd83c, type: 3}
-  - {fileID: 32900000, guid: d617563519584c843b704cc60356b033, type: 3}
-  - {fileID: 32900000, guid: 07accdd878f206d44ab6f016bd002c25, type: 3}
-  - {fileID: 32900000, guid: 8f6b433c6605b0f44a6c9317d8e6348b, type: 3}
-  - {fileID: 32900000, guid: 09bde98ed38c6974985a27e7120f4e96, type: 3}
+  - {fileID: 32900000, guid: ab6f284d404bfba48bff8d93d07043d4, type: 3}
+  - {fileID: 32900000, guid: 484bfd3508e740147a675ffbe26f402d, type: 3}
+  - {fileID: 32900000, guid: 9602accf2a6fbb846b11c6da9c3c86af, type: 3}
+  - {fileID: 32900000, guid: 60332ec2ffdf7084fb2955bc8f83087f, type: 3}
+  - {fileID: 32900000, guid: 1ae251051577c2040b0e0fb5ec659a21, type: 3}
+  - {fileID: 32900000, guid: bbf57656cb8c10840a7f969024c23e10, type: 3}
 --- !u!114 &5359044036423336552
 MonoBehaviour:
   m_ObjectHideFlags: 0

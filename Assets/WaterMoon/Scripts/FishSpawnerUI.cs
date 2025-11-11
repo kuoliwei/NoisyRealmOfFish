@@ -45,7 +45,7 @@ public class FishSpawnerUI : MonoBehaviour
             // 初次位置
             rt.anchoredPosition = canvasPos;
             rt.localRotation = Quaternion.identity;
-            rt.localScale = Vector3.one;
+            //rt.localScale = Vector3.one;
             lastPosByPerson[personId] = canvasPos;
             return;
         }
@@ -60,15 +60,15 @@ public class FishSpawnerUI : MonoBehaviour
             lastPosByPerson[personId] = canvasPos;
             return;
         }
+        float prevX = prev.x;
+        float currX = canvasPos.x;
 
-        // 翻面判定（x 方向）
-        float dx = canvasPos.x - prev.x;
-        if (Mathf.Abs(dx) > 0.001f)
+        if (Mathf.Abs(currX - prevX) > 0.001f)
         {
-            float dirSign = (dx >= 0 ? 1f : -1f) * (invertDirection ? -1f : 1f);
-            Vector3 s = rt.localScale;
-            s.x = Mathf.Abs(s.x) * dirSign;
-            rt.localScale = s;
+            if (currX > prevX)
+                rt.localScale = new Vector3(Mathf.Abs(rt.localScale.x), rt.localScale.y, rt.localScale.z);
+            else
+                rt.localScale = new Vector3(-Mathf.Abs(rt.localScale.x), rt.localScale.y, rt.localScale.z);
         }
 
         lastPosByPerson[personId] = canvasPos;

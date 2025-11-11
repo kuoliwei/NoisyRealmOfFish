@@ -1,43 +1,62 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class UITextPulse : MonoBehaviour
 {
     [Header("Scale Settings")]
-    [SerializeField] private float minScale;
-    [SerializeField] private float maxScale;
-    [SerializeField] private float frequency; // 每秒幾次完整放大縮小循環
+    [SerializeField] private float minScale = 1.5f;
+    [SerializeField] private float maxScale = 2f;
+    [SerializeField] private float frequency = 0.025f;          // 基準頻率（每秒幾次循環）
+    [Range(0f, 0.5f)]
+    [SerializeField] private float frequencyJitterPercent = 0.1f; // 每個實例的頻率抖動比例（0~50%）
 
     [Header("Transparency Settings")]
-    [Range(0f, 1f)][SerializeField] private float alphaAtMin;
-    [Range(0f, 1f)][SerializeField] private float alphaAtMax;
+    [Range(0f, 1f)][SerializeField] private float alphaAtMin = 0.1f;
+    [Range(0f, 1f)][SerializeField] private float alphaAtMax = 1.0f;
+
+    [Header("Time")]
+    [SerializeField] private bool useUnscaledTime = false;     // 需要不受 timeScale 影響就勾起來
 
     private CanvasGroup canvasGroup;
-    private float timeOffset;
+    private Vector3 baseScale;         // 保留 Prefab 原本的 localScale，縮放在其基礎上做
+    private float birthTime;           // 每個實例自己的「出生時間」
+    private float instFrequency;       // 每個實例自己的頻率（含抖動）
+    private const float TWO_PI = Mathf.PI * 2f;
 
     private void Awake()
     {
-        // 確保有 CanvasGroup（用來控制透明度）
         canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
 
-        // 每個物件的動畫略有不同相位，避免同步
-        timeOffset = Random.Range(0f, Mathf.PI * 2f);
+        baseScale = transform.localScale;
+
+        // 每個實例有自己的出生時間 & 頻率抖動（確保後續脫同步）
+        birthTime = CurrentTime;
+        float jitter = 1f + Random.Range(-frequencyJitterPercent, frequencyJitterPercent);
+        instFrequency = Mathf.Max(0f, frequency * jitter);
+
+        // 立刻套用一次，保證「剛生成就是最小值」
+        ApplyPulse(0f);
     }
 
     private void Update()
     {
-        // 計算當前時間點的 Sine 值（介於 -1~1）
-        float t = (Mathf.Sin((Time.time + timeOffset) * frequency * Mathf.PI * 2f) + 1f) / 2f;
+        float elapsed = CurrentTime - birthTime; // 出生後經過時間（每個實例不同）
+        ApplyPulse(elapsed);
+    }
 
-        // 插值縮放與透明度
-        float scale = Mathf.Lerp(minScale, maxScale, t);
-        float alpha = Mathf.Lerp(alphaAtMin, alphaAtMax, t);
+    private float CurrentTime => useUnscaledTime ? Time.unscaledTime : Time.time;
 
-        transform.localScale = new Vector3(scale, scale, 1f);
-        canvasGroup.alpha = alpha;
+    private void ApplyPulse(float elapsed)
+    {
+        // 讓 elapsed=0 時位於最小值：sin(x)=-1 → x = -π/2
+        float phase = (elapsed * instFrequency * TWO_PI) - (Mathf.PI * 0.5f);
+        float s = (Mathf.Sin(phase) + 1f) * 0.5f;   // 映射到 0..1
+
+        float k = Mathf.Lerp(minScale, maxScale, s);
+        float a = Mathf.Lerp(alphaAtMin, alphaAtMax, s);
+
+        transform.localScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
+        canvasGroup.alpha = a;
     }
 }
