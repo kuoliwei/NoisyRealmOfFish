@@ -267,8 +267,9 @@ public class NoseRayProcessor : MonoBehaviour
                 out canvasPos
             );
 
-            // 呼叫 FishSpawnerUI 生成詩句（獨立物件，顯示後自動消失）
-            fishSpawnerUI.SpawnVerse(canvasPos);
+            // 呼叫 FishSpawnerUI 生成詩句
+            //fishSpawnerUI.SpawnVerse(canvasPos);
+            fishSpawnerUI.SpawnVerse(canvasPos, kv.Key);
         }
     }
     // === End ===

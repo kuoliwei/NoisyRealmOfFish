@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8864424123894387811}
   - component: {fileID: 5676791231376255665}
   - component: {fileID: 4796922681792111289}
+  - component: {fileID: 5836387417990041695}
   m_Layer: 5
   m_Name: Verse
   m_TagString: Untagged
@@ -105,8 +106,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3b862ef4135374f8e99064bad9851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: 0.5
+  minScale: 1.5
   maxScale: 2
-  frequency: 0.05
+  frequency: 0.02
+  frequencyJitterPercent: 0.1
   alphaAtMin: 0.1
   alphaAtMax: 1
+  useUnscaledTime: 0
+--- !u!114 &5836387417990041695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2709791425807606130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bed73c5705243048a63ad869aa6fe5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
