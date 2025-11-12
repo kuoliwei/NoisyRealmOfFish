@@ -16,12 +16,22 @@ public class UITextPulse : MonoBehaviour
     [Header("Time")]
     [SerializeField] private bool useUnscaledTime = false;
 
+    [Header("Speed Offset Settings")]
+    [Tooltip("人物最低速度（靜止）")]
+    [SerializeField] private float minSpeed = 20f;
+    [Tooltip("人物最高速度（奔跑）")]
+    [SerializeField] private float maxSpeed = 500f;
+    [Tooltip("當速度最低時頻率最大偏移倍數，例如1.0代表+100%頻率")]
+    [SerializeField] private float maxOffsetPercent = 1.0f;
+
     private CanvasGroup canvasGroup;
     private Vector3 baseScale;
     private float birthTime;
     private float instFrequency;
     private const float TWO_PI = Mathf.PI * 2f;
     private bool initialized = false;
+
+    private float currentSpeed = 0f; // 外部傳入速度
 
     private void Awake()
     {
@@ -31,24 +41,25 @@ public class UITextPulse : MonoBehaviour
 
         baseScale = transform.localScale;
 
-        // 初始化為最小狀態（這一幀立即可見）
+        // 初始化為最小狀態
         float k = minScale;
         float a = alphaAtMin;
         transform.localScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
         canvasGroup.alpha = a;
 
-        // 延後一幀再啟動動畫，避免第一幀畫面出現錯誤大小
         StartCoroutine(InitPulseNextFrame());
     }
 
     private System.Collections.IEnumerator InitPulseNextFrame()
     {
-        yield return null; // 等待一幀
+        yield return null;
         birthTime = CurrentTime;
         float jitter = 1f + Random.Range(-frequencyJitterPercent, frequencyJitterPercent);
         instFrequency = Mathf.Max(0f, frequency * jitter);
         initialized = true;
     }
+
+    private float CurrentTime => useUnscaledTime ? Time.unscaledTime : Time.time;
 
     private void Update()
     {
@@ -59,11 +70,14 @@ public class UITextPulse : MonoBehaviour
         ApplyPulse(elapsed);
     }
 
-    private float CurrentTime => useUnscaledTime ? Time.unscaledTime : Time.time;
-
     private void ApplyPulse(float elapsed)
     {
-        float phase = (elapsed * instFrequency * TWO_PI) - (Mathf.PI * 0.5f);
+        // 根據速度調整頻率偏移
+        float speedT = Mathf.InverseLerp(minSpeed, maxSpeed, currentSpeed);
+        float offsetFactor = 1f + speedT * maxOffsetPercent;
+        float dynamicFreq = instFrequency * offsetFactor;
+
+        float phase = (elapsed * dynamicFreq * TWO_PI) - (Mathf.PI * 0.5f);
         float s = (Mathf.Sin(phase) + 1f) * 0.5f;
 
         float k = Mathf.Lerp(minScale, maxScale, s);
@@ -71,5 +85,11 @@ public class UITextPulse : MonoBehaviour
 
         transform.localScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
         canvasGroup.alpha = a;
+    }
+
+    // 由外部呼叫，更新人物移動速度
+    public void SetSpeed(float speed)
+    {
+        currentSpeed = Mathf.Max(0f, speed);
     }
 }

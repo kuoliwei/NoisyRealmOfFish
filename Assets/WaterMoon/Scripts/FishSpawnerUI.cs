@@ -75,6 +75,24 @@ public class FishSpawnerUI : MonoBehaviour
                 rt.localScale = new Vector3(-Mathf.Abs(rt.localScale.x), rt.localScale.y, rt.localScale.z);
         }
 
+        // === 新增：計算 X 軸速度並傳給詩句 ===
+        float deltaX = Mathf.Abs(canvasPos.x - prev.x);
+        float currentSpeed = deltaX / Time.deltaTime; // 單位：Canvas 單位 / 秒
+
+        // 將此速度分派給此人所有詩句
+        if (versesByPerson.TryGetValue(personId, out var verseList))
+        {
+            foreach (var v in verseList)
+            {
+                if (v == null) continue;
+                var pulse = v.GetComponent<UITextPulse>();
+                if (pulse != null)
+                    pulse.SetSpeed(currentSpeed);
+            }
+        }
+        // === End ===
+
+
         lastPosByPerson[personId] = canvasPos;
     }
 

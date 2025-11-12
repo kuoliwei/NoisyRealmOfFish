@@ -108,11 +108,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minScale: 1.5
   maxScale: 2
-  frequency: 0.02
+  frequency: 0.5
   frequencyJitterPercent: 0.1
   alphaAtMin: 0.1
   alphaAtMax: 1
   useUnscaledTime: 0
+  minSpeed: 200
+  maxSpeed: 400
+  maxOffsetPercent: 1
 --- !u!114 &5836387417990041695
 MonoBehaviour:
   m_ObjectHideFlags: 0
