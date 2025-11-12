@@ -93,5 +93,4 @@ public class StarSpawnerUI : MonoBehaviour
 
         Destroy(textObj, textLifetime);
     }
-
 }

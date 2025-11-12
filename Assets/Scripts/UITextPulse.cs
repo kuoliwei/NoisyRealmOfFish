@@ -83,13 +83,22 @@ public class UITextPulse : MonoBehaviour
         float k = Mathf.Lerp(minScale, maxScale, s);
         float a = Mathf.Lerp(alphaAtMin, alphaAtMax, s);
 
-        transform.localScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
-        canvasGroup.alpha = a;
+        //transform.localScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
+        //canvasGroup.alpha = a;
+
+        // === 對縮放與透明度做平滑 ===
+        Vector3 targetScale = new Vector3(baseScale.x * k, baseScale.y * k, baseScale.z);
+        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, 0.2f);
+
+        float currentAlpha = canvasGroup.alpha;
+        canvasGroup.alpha = Mathf.Lerp(currentAlpha, a, 0.2f);
+        // === End ===
     }
 
     // 由外部呼叫，更新人物移動速度
     public void SetSpeed(float speed)
     {
-        currentSpeed = Mathf.Max(0f, speed);
+        float target = Mathf.Max(0f, speed);
+        currentSpeed = Mathf.Lerp(currentSpeed, target, 0.2f); // 0.1f 表示平滑10%
     }
 }

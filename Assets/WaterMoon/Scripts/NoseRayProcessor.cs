@@ -245,32 +245,45 @@ public class NoseRayProcessor : MonoBehaviour
 
 
     // === 新增區塊：模仿星星的詩句生成 ===
-    private void GenerateVerses()
+ private void GenerateVerses()
+{
+    if (fishSpawnerUI == null || targetCanvas == null)
+        return;
+
+    foreach (var kv in latestNoseByPerson)
     {
-        if (fishSpawnerUI == null || targetCanvas == null)
-            return;
+        int personId = kv.Key;
+        Vector2 uv = kv.Value;
+        Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
 
-        foreach (var kv in latestNoseByPerson)
-        {
-            Vector2 uv = kv.Value;
-            Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
+        // 若該人已有幾句詩，從下往上排列
+        int verseIndex = 0;
+        if (fishSpawnerUI.TryGetVerseCount(personId, out int count))
+            verseIndex = count;
 
-            // 魚上方區域中心 + 隨機圓形偏移
-            Vector2 offset = Random.insideUnitCircle * verseRange;
-            Vector2 screenPos = screenCenter + offset + new Vector2(0f, verseOffsetY);
+        // === 排列邏輯 ===
+        float verseHeight = 40f;   // 每句詩高度
+        float verseSpacing = 50f;  // 每句之間距
+        float startOffsetY = verseOffsetY - verseRange + 25f; // 由圓心下方起始
+        float currentYOffset = startOffsetY + verseIndex * verseSpacing;
 
-            Vector2 canvasPos;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                fishSpawnerUI.ParentRect,
-                screenPos,
-                targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
-                out canvasPos
-            );
+        // X 軸仍隨機
+        float randomX = Random.Range(-verseRange, verseRange);
+        Vector2 offset = new Vector2(randomX, currentYOffset);
+        Vector2 screenPos = screenCenter + offset;
 
-            // 呼叫 FishSpawnerUI 生成詩句
-            //fishSpawnerUI.SpawnVerse(canvasPos);
-            fishSpawnerUI.SpawnVerse(canvasPos, kv.Key);
-        }
+        Vector2 canvasPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            fishSpawnerUI.ParentRect,
+            screenPos,
+            targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
+            out canvasPos
+        );
+
+        // 呼叫 FishSpawnerUI 生成詩句
+        fishSpawnerUI.SpawnVerse(canvasPos, personId);
     }
+}
+
     // === End ===
 }

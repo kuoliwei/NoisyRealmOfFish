@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/WaterMoon/Scenes/WaterSurface.unity
+    guid: 9ffc28ccdb181224d95f8dd904327c66
+  - enabled: 0
+    path: Assets/WaterMoon/Scenes/DreamOfRedMansionServer.unity
+    guid: 3bbf782d8925168429d01bd66f1b9e26
   m_configObjects: {}

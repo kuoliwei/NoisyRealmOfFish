@@ -106,15 +106,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d3b862ef4135374f8e99064bad9851f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minScale: 1.5
+  minScale: 0.5
   maxScale: 2
-  frequency: 0.5
+  frequency: 0.08
   frequencyJitterPercent: 0.1
   alphaAtMin: 0.1
   alphaAtMax: 1
   useUnscaledTime: 0
-  minSpeed: 200
-  maxSpeed: 400
+  minSpeed: 500
+  maxSpeed: 2000
   maxOffsetPercent: 1
 --- !u!114 &5836387417990041695
 MonoBehaviour:

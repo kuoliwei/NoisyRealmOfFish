@@ -233,4 +233,15 @@ public class FishSpawnerUI : MonoBehaviour
 
         verseOffsetX.Clear();
     }
+    // 取得某位使用者目前已生成的詩句數量
+    public bool TryGetVerseCount(int personId, out int count)
+    {
+        if (versesByPerson.TryGetValue(personId, out var list))
+        {
+            count = list.Count;
+            return true;
+        }
+        count = 0;
+        return false;
+    }
 }
