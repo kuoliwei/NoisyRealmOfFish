@@ -360,6 +360,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &212555540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 212555541}
+  - component: {fileID: 212555543}
+  - component: {fileID: 212555542}
+  m_Layer: 5
+  m_Name: Text (Legacy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &212555541
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212555540}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1303495119}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_SizeDelta: {x: -20, y: -13}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &212555542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212555540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &212555543
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 212555540}
+  m_CullTransparentMesh: 1
 --- !u!1 &224917932
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,7 +529,6 @@ GameObject:
   - component: {fileID: 294206261}
   - component: {fileID: 294206263}
   - component: {fileID: 294206262}
-  - component: {fileID: 294206264}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -515,40 +593,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294206260}
   m_CullTransparentMesh: 1
---- !u!328 &294206264
-VideoPlayer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 294206260}
-  m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 476d72bb77627a74989d7359113b01b0, type: 3}
-  m_TargetCameraAlpha: 1
-  m_TargetCamera3DLayout: 0
-  m_TargetCamera: {fileID: 0}
-  m_TargetTexture: {fileID: 8400000, guid: dd86893d8c0ed654e9e3f61410d73a00, type: 2}
-  m_TimeReference: 0
-  m_TargetMaterialRenderer: {fileID: 0}
-  m_TargetMaterialProperty: <noninit>
-  m_RenderMode: 2
-  m_AspectRatio: 2
-  m_DataSource: 0
-  m_TimeUpdateMode: 2
-  m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
-  m_TargetAudioSources: []
-  m_DirectAudioVolumes: []
-  m_Url: 
-  m_EnabledAudioTracks: 
-  m_DirectAudioMutes: 
-  m_ControlledAudioTrackCount: 0
-  m_PlayOnAwake: 1
-  m_SkipOnDrop: 1
-  m_Looping: 1
-  m_WaitForFirstFrame: 1
-  m_FrameReadyEventEnabled: 0
-  m_VideoShaders: []
 --- !u!1 &296241568
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,8 +1037,9 @@ MonoBehaviour:
   scaleRangeHigh: 2
   enableDebug: 1
   verseRange: 150
-  verseOffsetY: 150
+  verseOffsetY: 200
   verseSpeed: 0.5
+  verseSpacing: 60
 --- !u!4 &345150516
 Transform:
   m_ObjectHideFlags: 0
@@ -1317,7 +1362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &474665059
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1466,10 +1511,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10a95f3f714e7424a9268278357acea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mode: 1
+  moonEndingText: "\u7576\u55A7\u56C2\u6B62\u6B47\uFF0C\u975C\u6C34\u6620\u6708\u3002
+    \u4F60\u7684\u5FC3\u4E4B\u6240\u5411\uFF0C\u662F\u5426\u5DF2\u7136\u986F\u73FE\uFF1F"
+  fishEndingText: "\u6C34\u8349\u7E8F\u7E5E\uFF0C\u65C5\u9014\u5306\u8FEB\u3002 \u5728\u8FF7\u60D8\u4E4B\u4E2D\uFF0C\u4F60\u662F\u5426\u4ECD\u6E34\u671B\u90A3\u4EFD\u5FC3\u4E4B\u6240\u5411\uFF1F"
   waterWaveController: {fileID: 1847085251}
   maskPanel: {fileID: 1084675744}
   idleAfterCompletion: 5
   textVisibleDuration: 2.5
+  fishExperienceDuration: 30
   audioSource: {fileID: 963194229}
 --- !u!4 &491886166
 Transform:
@@ -1618,8 +1668,8 @@ MonoBehaviour:
   - "\u6211\u5C0B\u627E\u4F60\uFF0C\u5728\u901A\u5F80\u7D42\u9EDE\u7684\u9A5B\u7AD9"
   - "\u6211\u5C0B\u627E\u4F60\uFF0C\u5728\u5DE6\u53F3\u4EA4\u56F0\u7684\u8DEF\u53E3\u200B"
   - "\u5982\u4E00\u5C3E\u9B5A\uFF0C\u6211\u5F9E\u773E\u591A\u964C\u751F\u7684\u77B3\u5B54\u8FA8\u8B58\u4F60\u200B\r\n"
-  maxVersesPerPerson: 6
   fadeOutDuration: 2
+  smoothFactor: 0.023
 --- !u!1 &615799351
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,7 +1905,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &661209028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1868,7 +1918,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a09ab5fc64402d49b12d170a7577986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ndiName: 230719-NB (NoisyRealm_BG)
+  _ndiName: 
   _targetTexture: {fileID: 8400000, guid: dd86893d8c0ed654e9e3f61410d73a00, type: 2}
   _targetRenderer: {fileID: 0}
   _targetMaterialProperty: _MainTex
@@ -1901,7 +1951,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   receiver: {fileID: 661209028}
-  dropdown: {fileID: 474665060}
+  inputField: {fileID: 1303495120}
+  jsonPath: JsonData
+  jsonName: ndi_config
 --- !u!1 &690172364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2152,73 +2204,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 306.20532
-  - 193.23895
-  - 138.0362
-  - 287.9956
+  - 159.49368
+  - 290.0841
+  - 210.77742
+  - 194.23514
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.06456165
-  - 0.16878416
-  - 0.22867996
-  - 0.1730376
+  - 0.29000705
+  - 0.11653232
+  - 0.25930703
+  - 0.22347501
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.016010491
-  - 0.018083345
-  - 0.01745579
-  - 0.018434584
+  - 0.01751544
+  - 0.019450702
+  - 0.01967165
+  - 0.017094614
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.0646864
-  - 0.036130916
-  - 0.21484192
-  - 0.23609026
+  - 0.12004648
+  - 0.030000545
+  - 0.2122332
+  - 0.06439138
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 88.46069
-  - 41.2613
-  - 110.53992
-  - 106.10689
+  - 123.37794
+  - 55.14206
+  - 75.76375
+  - 74.14361
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.15284163
-  - 0.21438478
-  - 0.20104186
-  - 0.16362444
+  - 0.07043333
+  - 0.26069415
+  - 0.12774625
+  - 0.039538473
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.0080401935
-  - 0.008973559
-  - 0.00813858
-  - 0.008609392
+  - 0.009025556
+  - 0.0093216095
+  - 0.009683908
+  - 0.009956426
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.21055074
-  - 0.17896076
-  - 0.045561146
-  - 0.03233732
+  - 0.12121014
+  - 0.16121197
+  - 0.14655815
+  - 0.22291768
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -2538,6 +2590,85 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &943668585
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 943668586}
+  - component: {fileID: 943668588}
+  - component: {fileID: 943668587}
+  m_Layer: 5
+  m_Name: Placeholder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &943668586
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943668585}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1303495119}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -0.5}
+  m_SizeDelta: {x: -20, y: -13}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &943668587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943668585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 2
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 40
+    m_Alignment: 6
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Enter NDI name...
+--- !u!222 &943668588
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943668585}
+  m_CullTransparentMesh: 1
 --- !u!1 &961330697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2564,7 +2695,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961330697}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2953,73 +3084,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 70.00515
-  - 86.97985
-  - 57.113937
-  - 66.88409
+  - 84.655556
+  - 65.70099
+  - 80.73502
+  - 93.33009
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.24533188
-  - 0.101294324
-  - 0.27400145
-  - 0.18802062
+  - 0.08016665
+  - 0.5434836
+  - 0.17196488
+  - 0.58795965
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.007107664
-  - 0.0094697755
-  - 0.008076085
-  - 0.009381789
+  - 0.009743438
+  - 0.008215452
+  - 0.007428766
+  - 0.0071105445
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.060240064
-  - 0.09514892
-  - 0.025568528
-  - 0.04698401
+  - 0.026557297
+  - 0.077889875
+  - 0.021366451
+  - 0.04963309
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 235.72247
-  - 132.7733
-  - 184.88675
-  - 270.89178
+  - 236.2266
+  - 262.78555
+  - 168.10875
+  - 246.82477
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.33517808
-  - 0.4542024
-  - 0.07520304
-  - 0.27276206
+  - 0.19836926
+  - 0.59733653
+  - 0.4153245
+  - 0.3290976
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.007400796
-  - 0.005345298
-  - 0.007440658
-  - 0.00643328
+  - 0.007600401
+  - 0.0051737614
+  - 0.008274761
+  - 0.0068040136
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.09448004
-  - 0.026703414
-  - 0.016331106
-  - 0.056839198
+  - 0.05724036
+  - 0.07182311
+  - 0.016223004
+  - 0.054247014
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -3604,6 +3735,152 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &1303495118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1303495119}
+  - component: {fileID: 1303495122}
+  - component: {fileID: 1303495121}
+  - component: {fileID: 1303495120}
+  m_Layer: 5
+  m_Name: InputField (Legacy)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1303495119
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303495118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 943668586}
+  - {fileID: 212555541}
+  m_Father: {fileID: 1996380098}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -300}
+  m_SizeDelta: {x: 1600, y: 70}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1303495120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303495118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1303495121}
+  m_TextComponent: {fileID: 212555542}
+  m_Placeholder: {fileID: 943668587}
+  m_ContentType: 0
+  m_InputType: 0
+  m_AsteriskChar: 42
+  m_KeyboardType: 0
+  m_LineType: 0
+  m_HideMobileInput: 0
+  m_CharacterValidation: 0
+  m_CharacterLimit: 0
+  m_OnSubmit:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_CustomCaretColor: 0
+  m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
+  m_Text: 
+  m_CaretBlinkRate: 0.85
+  m_CaretWidth: 1
+  m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
+--- !u!114 &1303495121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303495118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1303495122
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1303495118}
+  m_CullTransparentMesh: 1
 --- !u!1 &1307725870
 GameObject:
   m_ObjectHideFlags: 0
@@ -4473,73 +4750,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 270.9755
-  - 222.21346
-  - 220.05072
-  - 113.25797
+  - 201.28636
+  - 153.81987
+  - 252.16187
+  - 274.50394
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.24077712
-  - 0.22032839
-  - 0.10358192
-  - 0.112902224
+  - 0.23624822
+  - 0.049652018
+  - 0.29740262
+  - 0.29087532
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.018338058
-  - 0.018103193
-  - 0.019978322
-  - 0.01700931
+  - 0.019685358
+  - 0.016913673
+  - 0.016527927
+  - 0.019103944
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.14788263
-  - 0.03554773
-  - 0.26349774
-  - 0.2257009
+  - 0.15363058
+  - 0.1325399
+  - 0.18801917
+  - 0.07394659
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 92.19042
-  - 50.5653
-  - 115.11047
-  - 102.12302
+  - 72.20993
+  - 76.19583
+  - 92.71765
+  - 122.99327
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.23679109
-  - 0.23541343
-  - 0.13386698
-  - 0.14534524
+  - 0.22189915
+  - 0.21857533
+  - 0.12723832
+  - 0.040568374
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.009791854
-  - 0.009550766
-  - 0.008217959
-  - 0.009267387
+  - 0.008903356
+  - 0.008488012
+  - 0.008691708
+  - 0.009057637
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.13804024
-  - 0.12033442
-  - 0.25381777
-  - 0.2848892
+  - 0.21216764
+  - 0.294575
+  - 0.15106845
+  - 0.13871033
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -4935,6 +5212,7 @@ RectTransform:
   - {fileID: 1940682922}
   - {fileID: 1028671753}
   - {fileID: 474665059}
+  - {fileID: 1303495119}
   m_Father: {fileID: 787897509}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

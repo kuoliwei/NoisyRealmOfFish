@@ -1,12 +1,21 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// 控制整個互動體驗流程：
-//—初始化 → 觸碰 → 結尾動畫 → 重置。
-/// </summary>
 public class ExperienceFlowController : MonoBehaviour
 {
+    public enum ExperienceMode
+    {
+        Moon,   // 靜水映月（觸碰星星達成）
+        Fish    // 喧囂魚境（用時間限制）
+    }
+
+    [Header("Mode")]
+    [SerializeField] private ExperienceMode mode = ExperienceMode.Moon;
+
+    [Header("Mask Text Content")]
+    [SerializeField, TextArea] private string moonEndingText;
+    [SerializeField, TextArea] private string fishEndingText;
+
     [Header("References")]
     [SerializeField] private WaterWaveDualController waterWaveController;
     [SerializeField] private MaskPanelController maskPanel;
@@ -14,6 +23,11 @@ public class ExperienceFlowController : MonoBehaviour
     [Header("Timings")]
     [SerializeField] private float idleAfterCompletion = 5f;
     [SerializeField] private float textVisibleDuration = 2.5f;
+
+    // === 新增：喧囂魚境用的體驗時間 ===
+    [Header("Fish Mode Settings")]
+    [SerializeField] private float fishExperienceDuration = 30f;
+    private float fishTimer = 0f;
 
     [Header("Audio")]
     [SerializeField] private AudioSource audioSource;
@@ -25,22 +39,38 @@ public class ExperienceFlowController : MonoBehaviour
         InitializeExperience();
     }
 
-    /// <summary>
-    /// 重設整個體驗至初始狀態
-    /// </summary>
     public void InitializeExperience()
     {
         hasCompleted = false;
+
         if (waterWaveController != null)
             waterWaveController.ResetToInitial();
 
         if (maskPanel != null)
             maskPanel.SetAlpha(0f);
+
+        // === 若是魚境模式，啟動計時 ===
+        if (mode == ExperienceMode.Fish)
+            fishTimer = fishExperienceDuration;
     }
 
-    /// <summary>
-    /// 由 WaterWaveDualController 呼叫當觸碰達到 totalTouchesRequired。
-    /// </summary>
+    // ======================
+    // 新增：Fish 模式倒數
+    // ======================
+    private void Update()
+    {
+        if (mode == ExperienceMode.Fish && !hasCompleted)
+        {
+            fishTimer -= Time.deltaTime;
+
+            if (fishTimer <= 0f)
+            {
+                OnExperienceCompleted();
+            }
+        }
+    }
+
+    // 靜水映月：由 WaterWaveDualController 調用
     public void OnExperienceCompleted()
     {
         if (hasCompleted) return;
@@ -51,46 +81,64 @@ public class ExperienceFlowController : MonoBehaviour
 
     private IEnumerator PlayEndSequence()
     {
+        // === 根據模式設定不同的文字內容 ===
+        if (maskPanel != null && maskPanel.MaskText != null)
+        {
+            switch (mode)
+            {
+                case ExperienceMode.Moon:
+                    maskPanel.MaskText.text = moonEndingText;
+                    break;
+
+                case ExperienceMode.Fish:
+                    maskPanel.MaskText.text = fishEndingText;
+                    break;
+            }
+        }
         Debug.Log("[FlowController] 結尾流程開始");
         yield return new WaitForSeconds(idleAfterCompletion);
 
-        // 音樂開始淡出
+        // 音樂淡出
         StartCoroutine(FadeAudio(1, 0, maskPanel.FadeDuration * 4 + textVisibleDuration));
 
-        // 1. 遮罩圖片淡入
+        // 1. 淡入 Image
         if (maskPanel != null)
             maskPanel.FadeInImageOnly();
 
-        //yield return new WaitForSeconds(maskPanelFadeDuration());
         yield return new WaitForSeconds(maskPanel.FadeDuration);
-        // 2. 等一段時間後淡入文字
+
+        // 2. 淡入 Text
         if (maskPanel != null)
             maskPanel.FadeInTextOnly();
+
         yield return new WaitForSeconds(maskPanel.FadeDuration);
         yield return new WaitForSeconds(textVisibleDuration);
 
-        // 3. 淡出文字
+        // 3. 淡出 Text
         if (maskPanel != null)
             maskPanel.FadeOutTextOnly();
+
         yield return new WaitForSeconds(maskPanel.FadeDuration);
+
         // 4. 重設應用
         InitializeExperience();
 
-        // 5. 最後淡出整體遮罩
+        // 5. 淡出 Image
         if (maskPanel != null)
             maskPanel.FadeOutImageOnly();
+
         audioSource.Stop();
         yield return new WaitForSeconds(maskPanel.FadeDuration);
-        Debug.Log("[FlowController] 體驗重置完成");
 
         yield return new WaitUntil(() => !audioSource.isPlaying);
+
         audioSource.Play();
         audioSource.volume = 1;
     }
+
     private IEnumerator FadeAudio(float start, float end, float fadeDuration)
     {
         float timer = 0f;
-        float volume = audioSource.volume;
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
@@ -100,11 +148,4 @@ public class ExperienceFlowController : MonoBehaviour
             yield return null;
         }
     }
-    // 幫助取得 MaskPanel 的 fade 時長
-    //private float maskPanelFadeDuration()
-    //{
-    //    var type = maskPanel.GetType();
-    //    var field = type.GetField("fadeDuration", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-    //    return field != null ? (float)field.GetValue(maskPanel) : 1.5f;
-    //}
 }

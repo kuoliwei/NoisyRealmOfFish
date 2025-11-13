@@ -12,6 +12,7 @@ public class MaskPanelController : MonoBehaviour
     [Header("References")]
     [SerializeField] private Image maskImage;
     [SerializeField] private TMP_Text maskText;
+    public TMP_Text MaskText => maskText;
 
     [Header("Fade Settings")]
     [SerializeField] private float fadeDuration = 1.5f;

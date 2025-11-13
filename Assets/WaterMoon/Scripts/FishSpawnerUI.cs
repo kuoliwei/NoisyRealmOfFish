@@ -29,7 +29,7 @@ public class FishSpawnerUI : MonoBehaviour
 
     // ===== 每人詩句數量上限 =====
     [Header("Verse Limits")]
-    [SerializeField, Min(1)] private int maxVersesPerPerson = 3;
+    //[SerializeField, Min(1)] private int maxVersesPerPerson = 3;
     private readonly Dictionary<int, List<GameObject>> versesByPerson = new();
 
     [Header("Verse Fade Settings")]
@@ -38,11 +38,18 @@ public class FishSpawnerUI : MonoBehaviour
     // 每句詩的相對偏移量（人ID → Verse物件 → X偏移）
     private readonly Dictionary<int, Dictionary<GameObject, float>> verseOffsetX = new();
 
+    [Header("Fish Turn Smoothing")]
+    [SerializeField, Range(0f, 1f)]
+    private float smoothFactor = 0.2f;  // 低通濾波係數（0.05~0.3 都很好）
+
+    private readonly Dictionary<int, float> smoothXByPerson = new();
+
     // ===== 魚生成 / 更新 =====
     public void SpawnOrUpdateFish(int personId, Vector2 canvasPos)
     {
         if (fishPrefab == null || parentRect == null) return;
 
+        // ===== 如果是新的人，建立新的魚 =====
         if (!fishByPerson.TryGetValue(personId, out var rt) || rt == null)
         {
             var go = Instantiate(fishPrefab, parentRect);
@@ -52,34 +59,63 @@ public class FishSpawnerUI : MonoBehaviour
             rt.anchoredPosition = canvasPos;
             rt.localRotation = Quaternion.identity;
             lastPosByPerson[personId] = canvasPos;
+
+            // 初始化平滑資料
+            smoothXByPerson[personId] = canvasPos.x;
+
             return;
         }
 
+        // ===== 老人更新位置 =====
         Vector2 prev = lastPosByPerson.TryGetValue(personId, out var lp) ? lp : rt.anchoredPosition;
         rt.anchoredPosition = canvasPos;
 
         if (!lastPosByPerson.ContainsKey(personId))
         {
             lastPosByPerson[personId] = canvasPos;
+            smoothXByPerson[personId] = canvasPos.x;
             return;
         }
 
         float prevX = prev.x;
         float currX = canvasPos.x;
 
-        if (Mathf.Abs(currX - prevX) > 0.001f)
+        // ============================================================
+        // 1. 取得上一幀平滑值（如果沒有就用 prevX）
+        // ============================================================
+        if (!smoothXByPerson.TryGetValue(personId, out float prevSmoothedX))
+            prevSmoothedX = prevX;
+
+        // ============================================================
+        // 2. 用低通濾波平滑 X 訊號
+        // ============================================================
+        float smoothedX = Mathf.Lerp(prevSmoothedX, currX, smoothFactor);
+        smoothXByPerson[personId] = smoothedX;
+
+        // ============================================================
+        // 3. 用平滑後位移判斷方向
+        // ============================================================
+        float delta = smoothedX - prevSmoothedX;
+
+        // 避免在 0 附近的小抖動造成方向翻來翻去
+        if (Mathf.Abs(delta) > 0.01f)
         {
-            if (currX > prevX)
-                rt.localScale = new Vector3(Mathf.Abs(rt.localScale.x), rt.localScale.y, rt.localScale.z);
-            else
-                rt.localScale = new Vector3(-Mathf.Abs(rt.localScale.x), rt.localScale.y, rt.localScale.z);
+            bool movingRight = delta > 0f;
+
+            // Inspector 反向開關（取決於你的魚素材朝向）
+            if (invertDirection)
+                movingRight = !movingRight;
+
+            float targetScaleX = Mathf.Abs(rt.localScale.x) * (movingRight ? 1f : -1f);
+            rt.localScale = new Vector3(targetScaleX, rt.localScale.y, rt.localScale.z);
         }
 
-        // === 新增：計算 X 軸速度並傳給詩句 ===
+        // ============================================================
+        // 4. 計算 X 速度提供給詩句動畫
+        // ============================================================
         float deltaX = Mathf.Abs(canvasPos.x - prev.x);
-        float currentSpeed = deltaX / Time.deltaTime; // 單位：Canvas 單位 / 秒
+        float currentSpeed = deltaX / Time.deltaTime;
 
-        // 將此速度分派給此人所有詩句
         if (versesByPerson.TryGetValue(personId, out var verseList))
         {
             foreach (var v in verseList)
@@ -90,11 +126,10 @@ public class FishSpawnerUI : MonoBehaviour
                     pulse.SetSpeed(currentSpeed);
             }
         }
-        // === End ===
-
 
         lastPosByPerson[personId] = canvasPos;
     }
+
 
     // ===== 詩句生成（由 NoseRayProcessor 呼叫） =====
     public void SpawnVerse(Vector2 canvasPos, int personId = -1)
@@ -111,9 +146,9 @@ public class FishSpawnerUI : MonoBehaviour
                 versesByPerson[personId] = list;
             }
 
-            // 若達上限就不再生成
-            if (list.Count >= maxVersesPerPerson)
-                return;
+            //// 若達上限就不再生成
+            //if (list.Count >= maxVersesPerPerson)
+            //    return;
         }
 
         GameObject verseObj = Instantiate(verseTextPrefab, parentRect);

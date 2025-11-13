@@ -58,6 +58,10 @@ public class NoseRayProcessor : MonoBehaviour
     [SerializeField] private float verseRange = 150f;   // 圓形隨機範圍半徑
     [SerializeField] private float verseOffsetY = 150f; // 魚上方中心距離
     [SerializeField] private float verseSpeed = 0.5f;   // 每秒幾句
+
+    [Header("Verse Layout Settings")]
+    [SerializeField] private float verseSpacing = 60f; // 每句詩之間的垂直距離
+
     private float verseSpawnTimer = 0f;
     // === End ===
 
@@ -261,10 +265,15 @@ public class NoseRayProcessor : MonoBehaviour
         if (fishSpawnerUI.TryGetVerseCount(personId, out int count))
             verseIndex = count;
 
+        // 動態計算最大句數（直徑 / 間距）
+        int maxVerses = Mathf.FloorToInt((verseRange * 2f) / verseSpacing);
+
+        // 若超過允許數量 → 不生成
+        if (verseIndex >= maxVerses)
+            continue;
+
         // === 排列邏輯 ===
-        float verseHeight = 40f;   // 每句詩高度
-        float verseSpacing = 50f;  // 每句之間距
-        float startOffsetY = verseOffsetY - verseRange + 25f; // 由圓心下方起始
+        float startOffsetY = verseOffsetY - verseRange + verseSpacing / 2f; // 由圓心下方起始
         float currentYOffset = startOffsetY + verseIndex * verseSpacing;
 
         // X 軸仍隨機
