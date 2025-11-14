@@ -36,14 +36,15 @@ public class FishSpawnerUI : MonoBehaviour
     [SerializeField] private float fadeOutDuration = 2f;   // 淡出秒數
 
     // 每句詩的相對偏移量（人ID → Verse物件 → X偏移）
-    private readonly Dictionary<int, Dictionary<GameObject, float>> verseOffsetX = new();
+    //private readonly Dictionary<int, Dictionary<GameObject, float>> verseOffsetX = new();
+    private readonly Dictionary<int, Dictionary<GameObject, Vector2>> verseOffset = new();
 
     [Header("Fish Turn Smoothing")]
     [SerializeField, Range(0f, 1f)]
     private float smoothFactor = 0.2f;  // 低通濾波係數（0.05~0.3 都很好）
 
     private readonly Dictionary<int, float> smoothXByPerson = new();
-
+    private readonly Dictionary<int, float> lastFlipTime = new();
     // ===== 魚生成 / 更新 =====
     public void SpawnOrUpdateFish(int personId, Vector2 canvasPos)
     {
@@ -92,23 +93,70 @@ public class FishSpawnerUI : MonoBehaviour
         float smoothedX = Mathf.Lerp(prevSmoothedX, currX, smoothFactor);
         smoothXByPerson[personId] = smoothedX;
 
+        //// ============================================================
+        //// 3. 用平滑後位移判斷方向
+        //// ============================================================
+        //float delta = smoothedX - prevSmoothedX;
+
+        //// 避免在 0 附近的小抖動造成方向翻來翻去
+        //if (Mathf.Abs(delta) > 0.01f)
+        //{
+        //    bool movingRight = delta > 0f;
+
+        //    // Inspector 反向開關（取決於你的魚素材朝向）
+        //    if (invertDirection)
+        //        movingRight = !movingRight;
+
+        //    float targetScaleX = Mathf.Abs(rt.localScale.x) * (movingRight ? 1f : -1f);
+        //    rt.localScale = new Vector3(targetScaleX, rt.localScale.y, rt.localScale.z);
+        //}
+
         // ============================================================
-        // 3. 用平滑後位移判斷方向
+        // 3. 改良版方向判斷（完全解決左右搖頭問題）
         // ============================================================
+
         float delta = smoothedX - prevSmoothedX;
 
-        // 避免在 0 附近的小抖動造成方向翻來翻去
-        if (Mathf.Abs(delta) > 0.01f)
+        // 方向變化需要足夠幅度才允許翻轉
+        float directionThreshold = 0.12f;    // 建議 0.10~0.15 之間
+
+        // 翻轉冷卻：翻轉後至少等待一段時間才可再次翻面
+        float flipCooldown = 0.25f;          // 越大越不敏感
+
+        // 初始化翻轉時間
+        if (!lastFlipTime.ContainsKey(personId))
+            lastFlipTime[personId] = Time.time;
+
+        bool inCooldown = (Time.time - lastFlipTime[personId]) < flipCooldown;
+
+        // 目前方向
+        bool facingRight = rt.localScale.x > 0;
+
+        // 預測方向：由 delta 判斷
+        bool wantRight = delta > 0;
+
+        // invertDirection 支援
+        if (invertDirection)
+            wantRight = !wantRight;
+
+        // 如果方向相同 → 不需要翻轉
+        if (wantRight == facingRight)
         {
-            bool movingRight = delta > 0f;
-
-            // Inspector 反向開關（取決於你的魚素材朝向）
-            if (invertDirection)
-                movingRight = !movingRight;
-
-            float targetScaleX = Mathf.Abs(rt.localScale.x) * (movingRight ? 1f : -1f);
-            rt.localScale = new Vector3(targetScaleX, rt.localScale.y, rt.localScale.z);
+            // OK：維持方向，不翻面
         }
+        else
+        {
+            // 若方向不同：檢查是否超過方向閾值
+            if (Mathf.Abs(delta) > directionThreshold && !inCooldown)
+            {
+                // 符合條件 → 真正翻轉
+                float targetScaleX = Mathf.Abs(rt.localScale.x) * (wantRight ? 1f : -1f);
+                rt.localScale = new Vector3(targetScaleX, rt.localScale.y, rt.localScale.z);
+
+                lastFlipTime[personId] = Time.time;
+            }
+        }
+
 
         // ============================================================
         // 4. 計算 X 速度提供給詩句動畫
@@ -155,7 +203,7 @@ public class FishSpawnerUI : MonoBehaviour
         RectTransform verseRect = verseObj.GetComponent<RectTransform>();
 
         verseRect.anchoredPosition = canvasPos;
-        verseRect.localScale = Vector3.one;
+        //verseRect.localScale = Vector3.one;
         verseRect.localRotation = Quaternion.identity;
 
         // 隨機詩句內容
@@ -181,10 +229,13 @@ public class FishSpawnerUI : MonoBehaviour
             // 記錄詩句初始 X 偏移量
             if (fishByPerson.ContainsKey(personId))
             {
-                float offsetX = canvasPos.x - fishByPerson[personId].anchoredPosition.x;
-                if (!verseOffsetX.ContainsKey(personId))
-                    verseOffsetX[personId] = new Dictionary<GameObject, float>();
-                verseOffsetX[personId][verseObj] = offsetX;
+                Vector2 fishPos = fishByPerson[personId].anchoredPosition;
+                Vector2 offset = canvasPos - fishPos;
+
+                if (!verseOffset.ContainsKey(personId))
+                    verseOffset[personId] = new Dictionary<GameObject, Vector2>();
+
+                verseOffset[personId][verseObj] = offset; // ← 同時存 X / Y
             }
         }
     }
@@ -200,7 +251,7 @@ public class FishSpawnerUI : MonoBehaviour
             if (!fishByPerson.TryGetValue(personId, out var fish) || fish == null)
                 continue;
 
-            float fishX = fish.anchoredPosition.x;
+            Vector2 fishPos = fish.anchoredPosition;
 
             foreach (var verseObj in kv.Value)
             {
@@ -209,16 +260,19 @@ public class FishSpawnerUI : MonoBehaviour
                 RectTransform verseRect = verseObj.GetComponent<RectTransform>();
                 if (verseRect == null) continue;
 
-                Vector2 pos = verseRect.anchoredPosition;
+                // 抓取初始 offsetX / offsetY
+                Vector2 offset = Vector2.zero;
 
-                // 保留詩句生成時的 X 偏移
-                float offsetX = 0f;
-                if (verseOffsetX.ContainsKey(personId) &&
-                    verseOffsetX[personId].TryGetValue(verseObj, out var storedOffset))
-                    offsetX = storedOffset;
+                if (verseOffset.ContainsKey(personId) &&
+                    verseOffset[personId].TryGetValue(verseObj, out var storedOffset))
+                {
+                    offset = storedOffset;
+                }
 
-                pos.x = fishX + offsetX;
-                verseRect.anchoredPosition = pos;
+                // 新的詩句座標
+                Vector2 newPos = fishPos + offset;
+
+                verseRect.anchoredPosition = newPos;
             }
         }
     }
@@ -248,7 +302,7 @@ public class FishSpawnerUI : MonoBehaviour
         }
 
         // 清除對應的偏移紀錄
-        verseOffsetX.Remove(personId);
+        verseOffset.Remove(personId);
     }
 
     // ===== 清空全部魚與詩句 =====
@@ -266,7 +320,7 @@ public class FishSpawnerUI : MonoBehaviour
         }
         versesByPerson.Clear();
 
-        verseOffsetX.Clear();
+        verseOffset.Clear();
     }
     // 取得某位使用者目前已生成的詩句數量
     public bool TryGetVerseCount(int personId, out int count)
