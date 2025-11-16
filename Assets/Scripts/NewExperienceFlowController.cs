@@ -1,9 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static NoseRayProcessor;
 
 public class NewExperienceFlowController : MonoBehaviour
 {
+    [Header("Sun Intro – Next Experience Preview Images")]
+    [SerializeField] private Sprite fishIntroSprite;
+    [SerializeField] private Sprite calmWaterIntroSprite;
+
+    // ===== Flow Sequence =====
+    private ExperienceMode[] flowSequence = new ExperienceMode[]
+    {
+    ExperienceMode.SunIntro,
+    ExperienceMode.NoisyFish,
+    ExperienceMode.SunIntro,
+    ExperienceMode.CalmWater,
+    };
+
+    private int flowIndex = 0;
+
     public enum ExperienceMode
     {
         SunIntro,     // 向陽簡介
@@ -41,6 +57,16 @@ public class NewExperienceFlowController : MonoBehaviour
     [SerializeField] private StarSpawnerUI starSpawner;
     [SerializeField] private WaterWaveDualController waterWave;
 
+    [Header("Book / SunIntro")]
+    [SerializeField] private Book sunBook;
+    [SerializeField] private AutoFlip sunBookAutoFlip;
+
+    // 翻頁時是否在動畫中
+    private bool isSunPageFlipping = false;
+
+    // 翻頁冷卻
+    private float sunFlipCooldown = 0f;
+
     [Header("BGM")]
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioClip sunIntroBGM;
@@ -50,11 +76,36 @@ public class NewExperienceFlowController : MonoBehaviour
     [SerializeField] private float bgmFadeDuration = 1.2f;
 
     private Coroutine bgmRoutine;
+
+    [SerializeField] private BGMController bgmController;
+
     private void Start()
     {
-        SwitchMode(startMode);
+        flowIndex = 0;
+        SwitchMode(flowSequence[flowIndex]);
     }
+    private void Update()
+    {
+        // 減少冷卻
+        if (sunFlipCooldown > 0)
+            sunFlipCooldown -= Time.deltaTime;
 
+        // 按空白鍵測試翻頁
+        if (Input.GetKeyDown(KeyCode.Space))
+            TryFlipSunPage();
+
+        //// 熱切換：按 F 進喧囂魚境
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    SwitchMode(ExperienceMode.NoisyFish);
+        //}
+
+        //// 熱切換：按 W 進靜水映月
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    SwitchMode(ExperienceMode.CalmWater);
+        //}
+    }
     public void SwitchMode(ExperienceMode mode)
     {
         currentMode = mode;
@@ -70,7 +121,39 @@ public class NewExperienceFlowController : MonoBehaviour
         switch (mode)
         {
             case ExperienceMode.SunIntro:
-                // 共用：離開魚境時停止所有魚境行為
+                Debug.Log("[Flow] Entering SunIntro");
+
+                // 1. 重設書頁
+                if (sunBook != null)
+                    sunBook.ResetToFirstPage();
+
+                // 2. 顯示書本 UI
+                if (book != null)
+                    book.SetActive(true);
+
+                // 3. ★★ AutoFlip 必須重新啟用（這個很重要）
+                if (sunBookAutoFlip != null)
+                {
+                    sunBookAutoFlip.enabled = true;
+                    sunBookAutoFlip.ResetFlipState(); // 我下面會給你這個函式
+                }
+
+                // 4. ★★ 翻頁鎖定旗標重置
+                isSunPageFlipping = false;
+
+                // 5. 設定下一段介紹頁（page4）
+                int nextIndex = flowIndex + 1;
+                if (nextIndex >= flowSequence.Length)
+                    nextIndex = 0;
+
+                ExperienceMode nextMode = flowSequence[nextIndex];
+
+                if (nextMode == ExperienceMode.NoisyFish && fishIntroSprite != null)
+                    sunBook.bookPages[4] = fishIntroSprite;
+                else if (nextMode == ExperienceMode.CalmWater && calmWaterIntroSprite != null)
+                    sunBook.bookPages[4] = calmWaterIntroSprite;
+
+                // 6. 停止魚境相關行為
                 if (fishSpawner != null)
                 {
                     fishSpawner.ClearAll();
@@ -82,9 +165,9 @@ public class NewExperienceFlowController : MonoBehaviour
 
                 if (fishModeController != null)
                     fishModeController.ResetTimer();
-                if (book != null) book.SetActive(true);
-                PlayBGM(sunIntroBGM);
 
+                // 7. SunIntro 的背景音樂
+                bgmController.PlayBGM(sunIntroBGM);
                 break;
 
             case ExperienceMode.NoisyFish:
@@ -109,7 +192,7 @@ public class NewExperienceFlowController : MonoBehaviour
 
                 if (fishModeController != null)
                     fishModeController.StartTimer(fishDuration, OnFishTimeout);
-                PlayBGM(noisyFishBGM);
+                bgmController.PlayBGM(noisyFishBGM);
 
                 break;
 
@@ -152,7 +235,7 @@ public class NewExperienceFlowController : MonoBehaviour
                 if (parentPanel != null) parentPanel.SetActive(true);
                 if (mask != null) mask.SetActive(true);
                 if (maskText != null) maskText.SetActive(true);
-                PlayBGM(calmWaterBGM);
+                bgmController.PlayBGM(calmWaterBGM);
 
                 break;
         }
@@ -203,43 +286,46 @@ public class NewExperienceFlowController : MonoBehaviour
     {
         if (currentMode == ExperienceMode.NoisyFish)
         {
-            // 清空魚境所有資料
             if (fishSpawner != null)
                 fishSpawner.ClearAll();
-
             if (fishModeController != null)
                 fishModeController.ResetTimer();
-
             if (noseRayProcessor != null)
-                noseRayProcessor.DisableFishMode();
+                noseRayProcessor.EnableNeutralMode();
         }
+
         if (currentMode == ExperienceMode.CalmWater)
         {
-            // 清星星
             if (starSpawner != null)
+            {
                 starSpawner.ClearAll();
+                starSpawner.enabled = false;
+            }
 
-            // 停止手部事件
             if (handRayProcessor != null)
                 handRayProcessor.enabled = false;
 
-            // 鼻子回到預設（星星用不到魚模式）
-            if (noseRayProcessor != null)
-                noseRayProcessor.EnableStarMode();
-
-            // 重設水波
             if (waterWave != null)
                 waterWave.ResetToInitial();
+
+            if (noseRayProcessor != null)
+                noseRayProcessor.EnableNeutralMode();
         }
+        // ====== FLOW: 前往下一段 ======
+        flowIndex++;
+        if (flowIndex >= flowSequence.Length)
+            flowIndex = 0;
 
-        Debug.Log($"[NewExperienceFlowController] OnAfterEndingReset for mode: {currentMode}");
-
-        // 下一步我們會在這裡依照 currentMode 實作：
-        // - 清除魚與詩句
-        // - 清除星星
-        // - 重設水波
-        // - 切回起始模式或等待外部指令
+        // 加一點點延遲，避免同一幀就切換
+        StartCoroutine(SwitchNextSequence());
+        Debug.Log("[Flow] Experience finished → Enter Next Mode");
     }
+    private IEnumerator SwitchNextSequence()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SwitchMode(flowSequence[flowIndex]);
+    }
+
     private void OnFishTimeout()
     {
         Debug.Log("[Flow] Fish mode timed out → Ending");
@@ -256,6 +342,8 @@ public class NewExperienceFlowController : MonoBehaviour
     {
         if (bgmSource == null) return;
         if (clip == null) return;
+
+        bgmSource.volume = 1f;
 
         if (bgmRoutine != null)
             StopCoroutine(bgmRoutine);
@@ -290,5 +378,72 @@ public class NewExperienceFlowController : MonoBehaviour
         }
 
         bgmSource.volume = startVolume;
+    }
+    private void TryFlipSunPage()
+    {
+        // 只在 SunIntro 模式下允許翻頁
+        if (currentMode != ExperienceMode.SunIntro)
+            return;
+
+        if (sunBook == null || sunBookAutoFlip == null)
+            return;
+
+        // 翻頁動畫中的期間不允許再翻
+        if (isSunPageFlipping)
+            return;
+
+        // 這一行如果你還有「冷卻時間」也可以保留，這邊先略過
+
+        // 開始翻頁動畫
+        sunBookAutoFlip.FlipRightPage();
+
+        // 設定旗標：正在翻頁中
+        isSunPageFlipping = true;
+
+        // 啟動：等 PageFlipTime 秒後再檢查是否要切換情境
+        StartCoroutine(WaitForSunPageFlipEnd());
+    }
+    private IEnumerator WaitForSunPageFlipEnd()
+    {
+        if (sunBookAutoFlip == null || sunBook == null)
+            yield break;
+
+        // 等待翻頁動畫撥完（你 AutoFlip 上面的 PageFlipTime）
+        yield return new WaitForSeconds(sunBookAutoFlip.PageFlipTime);
+
+        // 翻頁動畫已經完成
+        isSunPageFlipping = false;
+
+        // 觀察一下 currentPage 的變化，先印出來一次
+        Debug.Log($"[SunIntro] After flip, sunBook.currentPage = {sunBook.currentPage}");
+
+        // 這裡先用你目前的推測條件：翻三次後結束
+        // 你觀察到第三次翻頁完成會是「左5右6」
+        // 依 Book 的慣例，currentPage 通常會是左頁 index：也就是 5
+        // 如果實測 Log 出來不是 5，你可以把這個數字改成 Log 顯示的值
+        if (sunBook.currentPage >= 4)
+        {
+            Debug.Log("[SunIntro] Reached last page group → Switch to next experience");
+
+            // SunIntro 不走黑幕結尾，直接切下一個流程情境
+
+            flowIndex++;
+            if (flowIndex >= flowSequence.Length)
+                flowIndex = 0;
+
+            SwitchMode(flowSequence[flowIndex]);
+        }
+        //// 若翻完 -> 是最後一頁 → 自動重置
+        //if (sunBook.currentPage >= sunBook.TotalPageCount - 1)
+        //{
+        //    sunBook.ResetToFirstPage();
+        //}
+    }
+    private ExperienceMode GetNextFlowMode()
+    {
+        int next = flowIndex + 1;
+        if (next >= flowSequence.Length)
+            next = 0;
+        return flowSequence[next];
     }
 }

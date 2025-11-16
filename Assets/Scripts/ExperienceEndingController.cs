@@ -7,6 +7,7 @@ public class ExperienceEndingController : MonoBehaviour
     [Header("References")]
     [SerializeField] private MaskPanelController maskPanel;
     [SerializeField] private AudioSource audioSource;
+    [SerializeField] private BGMController bgmController;
 
     [Header("Timings")]
     [SerializeField] private float idleAfterCompletion = 5f;
@@ -48,8 +49,8 @@ public class ExperienceEndingController : MonoBehaviour
         if (maskPanel != null)
             totalFadeDuration = maskPanel.FadeDuration * 4 + textVisibleDuration;
 
-        if (audioSource != null)
-            StartCoroutine(FadeAudio(1f, 0f, totalFadeDuration));
+        if (bgmController != null)
+            bgmController.FadeOut(totalFadeDuration);
 
         // 3. 淡入 Image（黑幕）
         if (maskPanel != null)
@@ -77,16 +78,7 @@ public class ExperienceEndingController : MonoBehaviour
         if (maskPanel != null)
             maskPanel.FadeOutImageOnly();
 
-        // 8. 處理音樂重啟
-        if (audioSource != null)
-        {
-            audioSource.Stop();
-            yield return new WaitForSeconds(maskPanel.FadeDuration);
-            yield return new WaitUntil(() => !audioSource.isPlaying);
-
-            audioSource.Play();
-            audioSource.volume = 1f;
-        }
+        // do not stop music here anymore
 
         currentRoutine = null;
     }

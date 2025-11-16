@@ -1028,7 +1028,7 @@ MonoBehaviour:
   idleResetTime: 120
   starSpawnerUI: {fileID: 435305700}
   waterWaveController: {fileID: 1847085251}
-  flowController: {fileID: 491886165}
+  flowController: {fileID: 0}
   range: 150
   speed: 0.5
   colorBrightnessRangeLow: 0.5
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   starSpawnerUI: {fileID: 435305700}
   waterWaveController: {fileID: 1847085251}
   enableDebug: 1
-  flowController: {fileID: 491886165}
+  flowController: {fileID: 0}
 --- !u!4 &349085931
 Transform:
   m_ObjectHideFlags: 0
@@ -1446,7 +1446,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1560,12 +1560,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 787897508}
   BookPanel: {fileID: 390365585}
-  background: {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
+  background: {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
   bookPages:
   - {fileID: 21300000, guid: 1e364367cd643234ca25fe37f9613a56, type: 3}
-  - {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
+  - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   - {fileID: 21300000, guid: a02271a54852f534ca48bfe718eb1761, type: 3}
+  - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   - {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
+  - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   interactable: 0
   enableShadowEffect: 1
   currentPage: 0
@@ -1896,7 +1898,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370165805}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2470,60 +2472,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 474665058}
   m_CullTransparentMesh: 1
---- !u!1 &491886164
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 491886166}
-  - component: {fileID: 491886165}
-  m_Layer: 0
-  m_Name: ExperienceFlowController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &491886165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 491886164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10a95f3f714e7424a9268278357acea6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mode: 1
-  moonEndingText: "\u7576\u55A7\u56C2\u6B62\u6B47\uFF0C\u975C\u6C34\u6620\u6708\u3002
-    \u4F60\u7684\u5FC3\u4E4B\u6240\u5411\uFF0C\u662F\u5426\u5DF2\u7136\u986F\u73FE\uFF1F"
-  fishEndingText: "\u6C34\u8349\u7E8F\u7E5E\uFF0C\u65C5\u9014\u5306\u8FEB\u3002 \u5728\u8FF7\u60D8\u4E4B\u4E2D\uFF0C\u4F60\u662F\u5426\u4ECD\u6E34\u671B\u90A3\u4EFD\u5FC3\u4E4B\u6240\u5411\uFF1F"
-  waterWaveController: {fileID: 1847085251}
-  maskPanel: {fileID: 1084675744}
-  idleAfterCompletion: 5
-  textVisibleDuration: 2.5
-  fishExperienceDuration: 60
-  audioSource: {fileID: 963194229}
---- !u!4 &491886166
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 491886164}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1845873369}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &517949182
 GameObject:
   m_ObjectHideFlags: 0
@@ -3183,6 +3131,134 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 690172364}
   m_CullTransparentMesh: 1
+--- !u!1 &693817290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 693817291}
+  - component: {fileID: 693817292}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &693817291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693817290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 963194228}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &693817292
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693817290}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 2efe0c238b9d6504f891c724babc0199, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3325,73 +3401,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 162.99948
-  - 306.35452
-  - 186.32317
-  - 274.03503
+  - 142.60762
+  - 259.77667
+  - 175.91284
+  - 181.43977
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.08346929
-  - 0.1319046
-  - 0.13333967
-  - 0.18858089
+  - 0.077654414
+  - 0.09383741
+  - 0.12291056
+  - 0.031707942
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.01872693
-  - 0.016401669
-  - 0.017523434
-  - 0.017205361
+  - 0.019965336
+  - 0.019573174
+  - 0.017610475
+  - 0.016613793
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.2532661
-  - 0.08363628
-  - 0.05851496
-  - 0.053181723
+  - 0.16788724
+  - 0.0426885
+  - 0.08119486
+  - 0.11019741
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 87.55855
-  - 64.675606
-  - 92.762505
-  - 81.118645
+  - 106.33905
+  - 61.66022
+  - 105.72569
+  - 74.26016
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.0371007
-  - 0.1230706
-  - 0.112774
-  - 0.13348316
+  - 0.19900583
+  - 0.24916579
+  - 0.09329352
+  - 0.06882553
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.008396751
-  - 0.008197958
-  - 0.009270455
-  - 0.00920189
+  - 0.009382082
+  - 0.00815386
+  - 0.00840321
+  - 0.008880555
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.13496593
-  - 0.1599163
-  - 0.25463602
-  - 0.24823098
+  - 0.18625608
+  - 0.18197516
+  - 0.233247
+  - 0.20532551
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -3464,7 +3540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3447d5d7b1eda7b4fac104bf0a8cfba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startMode: 1
+  fishIntroSprite: {fileID: 21300000, guid: 452507d9e3c0f8d4e94b5dd0efd70b91, type: 3}
+  calmWaterIntroSprite: {fileID: 21300000, guid: dc79bf75669506d478b65a7c6f2cbe14, type: 3}
+  startMode: 0
   book: {fileID: 370165805}
   bg: {fileID: 294206260}
   parentPanel: {fileID: 1687494891}
@@ -3483,11 +3561,14 @@ MonoBehaviour:
   fishDuration: 30
   starSpawner: {fileID: 435305700}
   waterWave: {fileID: 1847085251}
+  sunBook: {fileID: 381475265}
+  sunBookAutoFlip: {fileID: 1007772760}
   bgmSource: {fileID: 963194229}
-  sunIntroBGM: {fileID: 0}
+  sunIntroBGM: {fileID: 8300000, guid: 481195e91b6490845adb09c074f4bc04, type: 3}
   noisyFishBGM: {fileID: 8300000, guid: d0c1ef498e9c4824c916d08f97a59132, type: 3}
   calmWaterBGM: {fileID: 8300000, guid: b8ef04787feb3fd4a8b4cdfb7ddc6063, type: 3}
   bgmFadeDuration: 1.2
+  bgmController: {fileID: 854544648}
 --- !u!1 &787897505
 GameObject:
   m_ObjectHideFlags: 0
@@ -3699,6 +3780,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 652739445}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &854544646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854544647}
+  - component: {fileID: 854544648}
+  m_Layer: 0
+  m_Name: BGMController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &854544647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854544646}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1845873369}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &854544648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854544646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6b079b5f8a55914ba57f0b578abb20e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 963194229}
+  fadeDuration: 1
 --- !u!1 &865796457
 GameObject:
   m_ObjectHideFlags: 0
@@ -3966,7 +4093,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 961330697}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4164,7 +4291,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 2.36, z: -52.94}
   m_LocalScale: {x: 1, y: 1.0070221, z: 0.9936801}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 693817291}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 14.56, y: 0, z: 0}
 --- !u!82 &963194229
@@ -4320,12 +4448,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Mode: 0
-  PageFlipTime: 1
+  PageFlipTime: 2
   TimeBetweenPages: 1
   DelayBeforeStarting: 0
   AutoStartFlip: 0
-  ControledBook: {fileID: 0}
+  ControledBook: {fileID: 381475265}
   AnimationFramesCount: 40
+  pageFlipAudio: {fileID: 693817292}
 --- !u!1 &1014108238
 GameObject:
   m_ObjectHideFlags: 0
@@ -4374,73 +4503,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 63.13439
-  - 87.168564
-  - 81.041626
-  - 45.57624
+  - 83.43143
+  - 55.39329
+  - 83.55087
+  - 77.54413
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.5040368
-  - 0.12103251
-  - 0.48023275
-  - 0.10034405
+  - 0.3886154
+  - 0.15019986
+  - 0.29013497
+  - 0.28932795
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.008307274
-  - 0.008719131
-  - 0.0097975135
-  - 0.008300652
+  - 0.007236621
+  - 0.008060618
+  - 0.008255813
+  - 0.00773326
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.07446635
-  - 0.02643824
-  - 0.040889267
-  - 0.08050963
+  - 0.017273549
+  - 0.077545494
+  - 0.07417019
+  - 0.058743887
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 214.90367
-  - 252.52747
-  - 229.79202
-  - 193.7863
+  - 180.35379
+  - 149.89209
+  - 153.17148
+  - 274.88782
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.16820447
-  - 0.40745252
-  - 0.29896787
-  - 0.18448545
+  - 0.25905073
+  - 0.09749052
+  - 0.38477105
+  - 0.49709627
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.0062829014
-  - 0.005134031
-  - 0.009341589
-  - 0.009813808
+  - 0.0070046247
+  - 0.005569504
+  - 0.0068051545
+  - 0.006844393
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.015590046
-  - 0.026697684
-  - 0.018034663
-  - 0.021984003
+  - 0.044484407
+  - 0.021871842
+  - 0.08034318
+  - 0.07665725
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -4698,9 +4827,9 @@ RectTransform:
   m_Children:
   - {fileID: 294206261}
   - {fileID: 1687494892}
+  - {fileID: 390365585}
   - {fileID: 2043572008}
   - {fileID: 961330698}
-  - {fileID: 390365585}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6112,12 +6241,12 @@ Transform:
   - {fileID: 349085931}
   - {fileID: 980646813}
   - {fileID: 1084675743}
-  - {fileID: 491886166}
   - {fileID: 557387879}
   - {fileID: 661209029}
   - {fileID: 754450817}
   - {fileID: 1180979404}
   - {fileID: 1936272933}
+  - {fileID: 854544647}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1847085249
@@ -6168,73 +6297,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 301.64276
-  - 194.00778
-  - 252.14693
-  - 107.469666
+  - 194.40848
+  - 285.17355
+  - 142.24411
+  - 307.91922
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.17730014
-  - 0.058879375
-  - 0.21056114
-  - 0.031152245
+  - 0.1898368
+  - 0.18823695
+  - 0.15615098
+  - 0.29742905
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.018825809
-  - 0.017463198
-  - 0.01905564
-  - 0.019293386
+  - 0.016239887
+  - 0.018121768
+  - 0.017890457
+  - 0.017363172
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.27124783
-  - 0.08165668
-  - 0.0890308
-  - 0.29956806
+  - 0.12080962
+  - 0.079207025
+  - 0.23654315
+  - 0.15600602
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 121.67201
-  - 88.214035
-  - 78.07275
-  - 97.31165
+  - 123.04974
+  - 61.003082
+  - 99.15304
+  - 72.5464
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.24519357
-  - 0.08785921
-  - 0.18909273
-  - 0.1050361
+  - 0.15944476
+  - 0.16354689
+  - 0.22873373
+  - 0.1219438
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.008747188
-  - 0.009491644
-  - 0.009724388
-  - 0.008576158
+  - 0.009379067
+  - 0.008497053
+  - 0.008260465
+  - 0.00918477
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.26350126
-  - 0.12920551
-  - 0.13788591
-  - 0.06518607
+  - 0.070301756
+  - 0.26873016
+  - 0.28718364
+  - 0.18235621
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -6261,7 +6390,7 @@ MonoBehaviour:
   reflectionScaleY: 1.2
   maxScaleX: 6.5
   maxScaleY: 3
-  totalTouchesRequired: 20
+  totalTouchesRequired: 10
   flowController: {fileID: 754450818}
 --- !u!1001 &1862703719
 PrefabInstance:
@@ -6382,6 +6511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maskPanel: {fileID: 1084675744}
   audioSource: {fileID: 963194229}
+  bgmController: {fileID: 854544648}
   idleAfterCompletion: 5
   textVisibleDuration: 2.5
 --- !u!1 &1940682921
@@ -6967,7 +7097,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043572007}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

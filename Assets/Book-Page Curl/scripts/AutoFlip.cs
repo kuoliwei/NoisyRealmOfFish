@@ -10,6 +10,9 @@ public class AutoFlip : MonoBehaviour {
     public Book ControledBook;
     public int AnimationFramesCount = 40;
     bool isFlipping = false;
+
+    [Header("Audio")]
+    public AudioSource pageFlipAudio;
     // Use this for initialization
     void Start () {
         if (!ControledBook)
@@ -29,6 +32,8 @@ public class AutoFlip : MonoBehaviour {
     public void FlipRightPage()
     {
         if (isFlipping) return;
+        if (pageFlipAudio != null)
+            pageFlipAudio.Play();
         if (ControledBook.currentPage >= ControledBook.TotalPageCount) return;
         isFlipping = true;
         float frameTime = PageFlipTime / AnimationFramesCount;
@@ -121,5 +126,9 @@ public class AutoFlip : MonoBehaviour {
             x += dx;
         }
         ControledBook.ReleasePage();
+    }
+    public void ResetFlipState()
+    {
+        isFlipping = false;
     }
 }

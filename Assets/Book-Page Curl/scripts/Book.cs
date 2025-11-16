@@ -445,4 +445,18 @@ public class Book : MonoBehaviour {
         if (onFinish != null)
             onFinish();
     }
+    public void ResetToFirstPage()
+    {
+        currentPage = 0;
+
+        // 還原左右頁顯示
+        UpdateSprites();
+
+        // 確保書頁 UI 恢復正常位置
+        Left.gameObject.SetActive(false);
+        Right.gameObject.SetActive(false);
+        Shadow.gameObject.SetActive(false);
+        ShadowLTR.gameObject.SetActive(false);
+    }
+
 }

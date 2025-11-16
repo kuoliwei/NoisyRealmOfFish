@@ -4,7 +4,7 @@ using static SkeletonDataProcessor;
 
 public class NoseRayProcessor : MonoBehaviour
 {
-    public enum SpawnMode { Stars, Fish }
+    public enum SpawnMode { None, Stars, Fish }
 
     [Header("Fish spawner")]
     [SerializeField] private FishSpawnerUI fishSpawnerUI;
@@ -350,6 +350,18 @@ public class NoseRayProcessor : MonoBehaviour
         if (enableDebug)
             Debug.Log("[NoseRayProcessor] Star Mode Enabled");
     }
+    public void EnableNeutralMode()
+    {
+        currentMode = SpawnMode.None;
 
+        // 不清空鼻子資料，因為下一輪進場會需要最新座標資料
+        // 只清空魚境資料與星星資料由 FlowController 控制
+
+        if (fishSpawnerUI != null)
+            fishSpawnerUI.ClearAll();
+
+        if (enableDebug)
+            Debug.Log("[NoseRayProcessor] Neutral Mode Enabled");
+    }
     // === End ===
 }
