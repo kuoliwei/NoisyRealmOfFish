@@ -93,4 +93,15 @@ public class StarSpawnerUI : MonoBehaviour
 
         Destroy(textObj, textLifetime);
     }
+    public void ClearAll()
+    {
+        foreach (var kvp in activeStars)
+        {
+            if (kvp.Key != null)
+                Destroy(kvp.Key);
+        }
+
+        activeStars.Clear();
+    }
+
 }

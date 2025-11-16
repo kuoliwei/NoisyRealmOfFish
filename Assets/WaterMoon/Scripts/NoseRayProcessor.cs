@@ -249,50 +249,107 @@ public class NoseRayProcessor : MonoBehaviour
 
 
     // === 新增區塊：模仿星星的詩句生成 ===
- private void GenerateVerses()
-{
-    if (fishSpawnerUI == null || targetCanvas == null)
-        return;
-
-    foreach (var kv in latestNoseByPerson)
+    private void GenerateVerses()
     {
-        int personId = kv.Key;
-        Vector2 uv = kv.Value;
-        Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
+        if (fishSpawnerUI == null || targetCanvas == null)
+            return;
 
-        // 若該人已有幾句詩，從下往上排列
-        int verseIndex = 0;
-        if (fishSpawnerUI.TryGetVerseCount(personId, out int count))
-            verseIndex = count;
+        foreach (var kv in latestNoseByPerson)
+        {
+            int personId = kv.Key;
+            Vector2 uv = kv.Value;
+            Vector2 screenCenter = new Vector2(uv.x * Screen.width, uv.y * Screen.height);
 
-        // 動態計算最大句數（直徑 / 間距）
-        int maxVerses = Mathf.FloorToInt((verseRange * 2f) / verseSpacing);
+            // 若該人已有幾句詩，從下往上排列
+            int verseIndex = 0;
+            if (fishSpawnerUI.TryGetVerseCount(personId, out int count))
+                verseIndex = count;
 
-        // 若超過允許數量 → 不生成
-        if (verseIndex >= maxVerses)
-            continue;
+            // 動態計算最大句數（直徑 / 間距）
+            int maxVerses = Mathf.FloorToInt((verseRange * 2f) / verseSpacing);
 
-        // === 排列邏輯 ===
-        float startOffsetY = verseOffsetY - verseRange + verseSpacing / 2f; // 由圓心下方起始
-        float currentYOffset = startOffsetY + verseIndex * verseSpacing;
+            // 若超過允許數量 → 不生成
+            if (verseIndex >= maxVerses)
+                continue;
 
-        // X 軸仍隨機
-        float randomX = Random.Range(-verseRange, verseRange);
-        Vector2 offset = new Vector2(randomX, currentYOffset);
-        Vector2 screenPos = screenCenter + offset;
+            // === 排列邏輯 ===
+            float startOffsetY = verseOffsetY - verseRange + verseSpacing / 2f; // 由圓心下方起始
+            float currentYOffset = startOffsetY + verseIndex * verseSpacing;
 
-        Vector2 canvasPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            fishSpawnerUI.ParentRect,
-            screenPos,
-            targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
-            out canvasPos
-        );
+            // X 軸仍隨機
+            float randomX = Random.Range(-verseRange, verseRange);
+            Vector2 offset = new Vector2(randomX, currentYOffset);
+            Vector2 screenPos = screenCenter + offset;
 
-        // 呼叫 FishSpawnerUI 生成詩句
-        fishSpawnerUI.SpawnVerse(canvasPos, personId);
+            Vector2 canvasPos;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                fishSpawnerUI.ParentRect,
+                screenPos,
+                targetCanvas.renderMode == RenderMode.ScreenSpaceCamera ? uiCamera : null,
+                out canvasPos
+            );
+
+            // 呼叫 FishSpawnerUI 生成詩句
+            fishSpawnerUI.SpawnVerse(canvasPos, personId);
+        }
     }
-}
+    // ===============================================
+    //  外部控制：切換到 Fish 模式
+    // ===============================================
+    public void EnableFishMode()
+    {
+        currentMode = SpawnMode.Fish;
+
+        // 清空星星的資料（避免遺留）
+        spawnTimer = 0f;
+
+        // 清空魚境資料（乾淨開始）
+        latestNoseByPerson.Clear();
+        lastSeenByPerson.Clear();
+        verseSpawnTimer = 0f;
+
+        if (fishSpawnerUI != null)
+            fishSpawnerUI.ClearAll();
+
+        if (enableDebug)
+            Debug.Log("[NoseRayProcessor] Fish Mode Enabled");
+    }
+
+    // ===============================================
+    //  外部控制：退出 Fish 模式
+    // ===============================================
+    public void DisableFishMode()
+    {
+        // 清空魚境資料
+        latestNoseByPerson.Clear();
+        lastSeenByPerson.Clear();
+        verseSpawnTimer = 0f;
+
+        if (fishSpawnerUI != null)
+            fishSpawnerUI.ClearAll();
+
+        if (enableDebug)
+            Debug.Log("[NoseRayProcessor] Fish Mode Disabled");
+    }
+
+    // ===============================================
+    //  外部控制：切換到 Star 模式（靜水映月會用到）
+    // ===============================================
+    public void EnableStarMode()
+    {
+        currentMode = SpawnMode.Stars;
+
+        // 清空魚境資料，以免影響星星模式
+        latestNoseByPerson.Clear();
+        lastSeenByPerson.Clear();
+        verseSpawnTimer = 0f;
+
+        if (fishSpawnerUI != null)
+            fishSpawnerUI.ClearAll();
+
+        if (enableDebug)
+            Debug.Log("[NoseRayProcessor] Star Mode Enabled");
+    }
 
     // === End ===
 }

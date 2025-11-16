@@ -75,6 +75,9 @@ public class WaterWaveDualController : MonoBehaviour
     private static readonly int ReflectionScaleXID = Shader.PropertyToID("_ReflectionScaleX");
     private static readonly int ReflectionScaleYID = Shader.PropertyToID("_ReflectionScaleY");
 
+    [Header("Flow Reference")]
+    [SerializeField] private NewExperienceFlowController flowController;
+
     void Start()
     {
         RandomizeWaves();
@@ -155,6 +158,8 @@ public class WaterWaveDualController : MonoBehaviour
         UpdateReflectionScale();
 
         Debug.Log($"[WaterWaveDualController] Touch {currentTouchCount}/{totalTouchesRequired} → X={reflectionScaleX:F2}, Y={reflectionScaleY:F2}");
+        if (IsExperienceCompleted())
+            NotifyWaterCompleted();
     }
 
     private void UpdateReflectionScale()
@@ -183,5 +188,16 @@ public class WaterWaveDualController : MonoBehaviour
 
         Debug.Log("[WaterWaveDualController] 已重設為初始值");
     }
-
+    public void NotifyWaterCompleted()
+    {
+        if (flowController != null)
+        {
+            Debug.Log("[WaterWaveDualController] Water completed → Notify FlowController");
+            flowController.OnWaterCompleted();
+        }
+        else
+        {
+            Debug.LogWarning("[WaterWaveDualController] flowController 未設定，無法通知完成事件。");
+        }
+    }
 }
