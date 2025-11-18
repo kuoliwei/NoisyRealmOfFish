@@ -14,12 +14,13 @@ public class HandRayProcessor : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool enableDebug = true;
 
-    [SerializeField] private ExperienceFlowController flowController;
+    // 原本是 ExperienceFlowController，現在改成 NewExperienceFlowController
+    [SerializeField] private NewExperienceFlowController flowController;
 
     private bool isHandActive = false;
     private bool lastState = false;
     private float lastReceivedTime = -999f;
-    private List<Vector2> latestHandHits = new();
+    private List<Vector2> latestHandHits = new List<Vector2>();
 
     private Canvas targetCanvas;
     private Camera uiCamera;
@@ -80,13 +81,17 @@ public class HandRayProcessor : MonoBehaviour
                 GameObject starObj = kvp.Key;
                 var data = kvp.Value;
 
+                // 星星如果已經被 Destroy 變成 fake null，直接略過，避免後面存取 name 出錯
+                if (starObj == null)
+                    continue;
+
                 float dist = Vector2.Distance(canvasPos, data.screenPos);
                 float hitRadius = data.scale * hitRadiusMultiplier;
 
                 if (dist < hitRadius)
                 {
                     if (enableDebug)
-                        Debug.Log($"手部擊中星星：{starObj.name}");
+                        Debug.Log("手部擊中星星：" + starObj.name);
 
                     if (starObj != null)
                     {
@@ -98,8 +103,9 @@ public class HandRayProcessor : MonoBehaviour
                         {
                             waterWaveController.IncreaseReflectionScale();
 
-                            if (waterWaveController.IsExperienceCompleted())
-                                flowController.OnExperienceCompleted();
+                            // 這裡改成呼叫 NewExperienceFlowController 的 OnWaterCompleted
+                            if (waterWaveController.IsExperienceCompleted() && flowController != null)
+                                flowController.OnWaterCompleted();
                         }
                     }
                 }

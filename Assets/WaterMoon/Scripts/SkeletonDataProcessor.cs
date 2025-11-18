@@ -149,8 +149,8 @@ public class SkeletonDataProcessor : MonoBehaviour
                     noseSmoothers[p] = noseSm = new HandSmoother(0.2f, 0.002f);
 
                 Vector3 dir = skeletonParent != null
-                    ? skeletonParent.TransformDirection(Vector3.back)
-                    : Vector3.back;
+                    ? skeletonParent.TransformDirection(Vector3.left)
+                    : Vector3.left;
 
                 Ray ray = new Ray(nose.position, dir.normalized);
                 if (Physics.Raycast(ray, out RaycastHit hit, rayLength) && hit.collider == screenCollider)
@@ -227,12 +227,13 @@ public class SkeletonDataProcessor : MonoBehaviour
 
         if(noseHitList.Count > 0)
         {
+            noseHitList.Sort((a, b) => a.uv.x.CompareTo(b.uv.x));
             OnNoseHitProcessed?.Invoke(noseHitList);
         }
 
         if (handHitList.Count > 0)
         {
-            //handHitList.Sort((a, b) => a.x.CompareTo(b.x));
+            handHitList.Sort((a, b) => a.x.CompareTo(b.x));
 
             OnHandHitProcessed.Invoke(handHitList);
 
@@ -298,8 +299,8 @@ public class SkeletonDataProcessor : MonoBehaviour
         //    : Vector3.forward;
 
         Vector3 dir = skeletonParent != null
-            ? skeletonParent.TransformDirection(Vector3.back)
-            : Vector3.back;
+            ? skeletonParent.TransformDirection(Vector3.left)
+            : Vector3.left;
 
         Ray ray = new Ray(wrist.position, dir.normalized);
 
@@ -316,4 +317,16 @@ public class SkeletonDataProcessor : MonoBehaviour
 
         return hitCount;
     }
+    public Vector3[] GetLatestJoints(int personId)
+    {
+        if (visuals.TryGetValue(personId, out var vis))
+        {
+            Vector3[] arr = new Vector3[vis.joints.Length];
+            for (int i = 0; i < arr.Length; i++)
+                arr[i] = vis.joints[i].position;
+            return arr;
+        }
+        return null;
+    }
+
 }

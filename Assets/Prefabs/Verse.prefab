@@ -113,8 +113,8 @@ MonoBehaviour:
   alphaAtMin: 0.1
   alphaAtMax: 1
   useUnscaledTime: 0
-  minSpeed: 500
-  maxSpeed: 2000
+  minSpeed: 300
+  maxSpeed: 1200
   maxOffsetPercent: 1
 --- !u!114 &5836387417990041695
 MonoBehaviour:

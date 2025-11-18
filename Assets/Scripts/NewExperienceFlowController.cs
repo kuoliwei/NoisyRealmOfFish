@@ -60,6 +60,7 @@ public class NewExperienceFlowController : MonoBehaviour
     [Header("Book / SunIntro")]
     [SerializeField] private Book sunBook;
     [SerializeField] private AutoFlip sunBookAutoFlip;
+    [SerializeField] private SwipeDetector swipeDetector;
 
     // 翻頁時是否在動畫中
     private bool isSunPageFlipping = false;
@@ -109,7 +110,8 @@ public class NewExperienceFlowController : MonoBehaviour
     public void SwitchMode(ExperienceMode mode)
     {
         currentMode = mode;
-
+        if (swipeDetector != null)
+            swipeDetector.ActivateSunIntroSwipe(false);
         // 全部先關掉
         if (book != null) book.SetActive(false);
         if (bg != null) bg.SetActive(false);
@@ -131,14 +133,14 @@ public class NewExperienceFlowController : MonoBehaviour
                 if (book != null)
                     book.SetActive(true);
 
-                // 3. ★★ AutoFlip 必須重新啟用（這個很重要）
+                // 3. AutoFlip 必須重新啟用（這個很重要）
                 if (sunBookAutoFlip != null)
                 {
                     sunBookAutoFlip.enabled = true;
                     sunBookAutoFlip.ResetFlipState(); // 我下面會給你這個函式
                 }
 
-                // 4. ★★ 翻頁鎖定旗標重置
+                // 4. 翻頁鎖定旗標重置
                 isSunPageFlipping = false;
 
                 // 5. 設定下一段介紹頁（page4）
@@ -162,6 +164,9 @@ public class NewExperienceFlowController : MonoBehaviour
 
                 if (noseRayProcessor != null)
                     noseRayProcessor.DisableFishMode();
+
+                if (noseRayProcessor != null)
+                    noseRayProcessor.EnableNeutralMode();
 
                 if (fishModeController != null)
                     fishModeController.ResetTimer();
@@ -379,7 +384,7 @@ public class NewExperienceFlowController : MonoBehaviour
 
         bgmSource.volume = startVolume;
     }
-    private void TryFlipSunPage()
+    public void TryFlipSunPage()
     {
         // 只在 SunIntro 模式下允許翻頁
         if (currentMode != ExperienceMode.SunIntro)

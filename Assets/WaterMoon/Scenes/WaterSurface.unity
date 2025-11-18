@@ -1022,14 +1022,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fishSpawnerUI: {fileID: 557387880}
-  loseTrackSeconds: 0.2
-  currentMode: 1
-  loseTrackThreshold: 0.2
+  loseTrackSeconds: 1
+  currentMode: 0
+  loseTrackThreshold: 1
   idleResetTime: 120
   starSpawnerUI: {fileID: 435305700}
   waterWaveController: {fileID: 1847085251}
   flowController: {fileID: 0}
-  range: 150
+  range: 250
   speed: 0.5
   colorBrightnessRangeLow: 0.5
   colorBrightnessRangeHigh: 1
@@ -1089,7 +1089,7 @@ MonoBehaviour:
   starSpawnerUI: {fileID: 435305700}
   waterWaveController: {fileID: 1847085251}
   enableDebug: 1
-  flowController: {fileID: 0}
+  flowController: {fileID: 754450818}
 --- !u!4 &349085931
 Transform:
   m_ObjectHideFlags: 0
@@ -1254,7 +1254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &370355301
 GameObject:
   m_ObjectHideFlags: 0
@@ -1273,7 +1273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &370360451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1562,9 +1562,9 @@ MonoBehaviour:
   BookPanel: {fileID: 390365585}
   background: {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
   bookPages:
-  - {fileID: 21300000, guid: 1e364367cd643234ca25fe37f9613a56, type: 3}
+  - {fileID: 21300000, guid: 3e0328ac7ad5aa0498ce5a41e5f1ea69, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
-  - {fileID: 21300000, guid: a02271a54852f534ca48bfe718eb1761, type: 3}
+  - {fileID: 21300000, guid: aeb4fc7cfd0d8854aa1c83f9d6548907, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   - {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1e364367cd643234ca25fe37f9613a56, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3e0328ac7ad5aa0498ce5a41e5f1ea69, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1788,6 +1788,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!1 &383712320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 383712321}
+  - component: {fileID: 383712322}
+  m_Layer: 0
+  m_Name: SwipeDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &383712321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383712320}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1845873369}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &383712322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383712320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d15706de9dcfdfe4998dc0455b1ca86f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonProcessor: {fileID: 1818175208}
+  sunBookAutoFlip: {fileID: 1007772760}
+  flowController: {fileID: 754450818}
+  wristAboveHipThreshold: 0
+  minSwipeDistanceX: 0.12
+  maxSwipeTime: 0.15
+  minInterval: 0.02
 --- !u!222 &390079015
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1952,7 +2003,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 238.49512, y: -106.38922}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1920, y: 3240}
   m_Pivot: {x: 0.000000020489097, y: 0.12}
 --- !u!224 &390376287
@@ -1971,7 +2022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 238.49512, y: -105.37775}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 4920, y: 3240}
   m_Pivot: {x: 1, y: 0.12}
 --- !u!224 &390383223
@@ -1991,7 +2042,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -0.00000011920929, y: 0}
+  m_SizeDelta: {x: 8.4703295e-22, y: 0}
   m_Pivot: {x: 0.00000008009374, y: -0.00000007264316}
 --- !u!224 &390451905
 RectTransform:
@@ -2123,8 +2174,8 @@ Transform:
   m_GameObject: {fileID: 424989380}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.63, z: 0}
-  m_LocalScale: {x: 3.135, y: 1.7634375, z: 1}
+  m_LocalPosition: {x: 0, y: 1.74375, z: 0}
+  m_LocalScale: {x: 3, y: 1.6875, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 865796458}
@@ -2565,7 +2616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &533084654
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3401,73 +3452,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 142.60762
-  - 259.77667
-  - 175.91284
-  - 181.43977
+  - 155.83954
+  - 172.14835
+  - 284.31818
+  - 267.71234
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.077654414
-  - 0.09383741
-  - 0.12291056
-  - 0.031707942
+  - 0.12521125
+  - 0.108156
+  - 0.03991711
+  - 0.09692554
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.019965336
-  - 0.019573174
-  - 0.017610475
-  - 0.016613793
+  - 0.018232904
+  - 0.019710911
+  - 0.01792046
+  - 0.016903372
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.16788724
-  - 0.0426885
-  - 0.08119486
-  - 0.11019741
+  - 0.28998762
+  - 0.03094036
+  - 0.09870212
+  - 0.19345698
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 106.33905
-  - 61.66022
-  - 105.72569
-  - 74.26016
+  - 92.88707
+  - 89.53355
+  - 57.64608
+  - 98.64648
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.19900583
-  - 0.24916579
-  - 0.09329352
-  - 0.06882553
+  - 0.29906774
+  - 0.25628522
+  - 0.17355242
+  - 0.26307607
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.009382082
-  - 0.00815386
-  - 0.00840321
-  - 0.008880555
+  - 0.009411847
+  - 0.008260359
+  - 0.008911554
+  - 0.008737241
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.18625608
-  - 0.18197516
-  - 0.233247
-  - 0.20532551
+  - 0.27338934
+  - 0.1939376
+  - 0.16092077
+  - 0.061554044
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -3540,8 +3591,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3447d5d7b1eda7b4fac104bf0a8cfba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishIntroSprite: {fileID: 21300000, guid: 452507d9e3c0f8d4e94b5dd0efd70b91, type: 3}
-  calmWaterIntroSprite: {fileID: 21300000, guid: dc79bf75669506d478b65a7c6f2cbe14, type: 3}
+  fishIntroSprite: {fileID: 21300000, guid: 06c8a29059302a746818ed6a6d6a5a1a, type: 3}
+  calmWaterIntroSprite: {fileID: 21300000, guid: bd7da5593b3b91f439ee2159b972fcdc, type: 3}
   startMode: 0
   book: {fileID: 370165805}
   bg: {fileID: 294206260}
@@ -3558,11 +3609,12 @@ MonoBehaviour:
   noseRayProcessor: {fileID: 345150515}
   handRayProcessor: {fileID: 349085930}
   fishModeController: {fileID: 1180979405}
-  fishDuration: 30
+  fishDuration: 90
   starSpawner: {fileID: 435305700}
   waterWave: {fileID: 1847085251}
   sunBook: {fileID: 381475265}
   sunBookAutoFlip: {fileID: 1007772760}
+  swipeDetector: {fileID: 0}
   bgmSource: {fileID: 963194229}
   sunIntroBGM: {fileID: 8300000, guid: 481195e91b6490845adb09c074f4bc04, type: 3}
   noisyFishBGM: {fileID: 8300000, guid: d0c1ef498e9c4824c916d08f97a59132, type: 3}
@@ -3773,13 +3825,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 849679650}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0.3025, y: 0, z: -1.35}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -0.21, y: 0, z: -1.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 652739445}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &854544646
 GameObject:
   m_ObjectHideFlags: 0
@@ -3893,7 +3945,7 @@ Camera:
   far clip plane: 3
   field of view: 60
   orthographic: 1
-  orthographic size: 0.881719
+  orthographic size: 0.84375
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -4503,73 +4555,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 83.43143
-  - 55.39329
-  - 83.55087
-  - 77.54413
+  - 48.52993
+  - 51.84218
+  - 57.502052
+  - 76.12358
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.3886154
-  - 0.15019986
-  - 0.29013497
-  - 0.28932795
+  - 0.49083015
+  - 0.3993707
+  - 0.4524851
+  - 0.5403848
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.007236621
-  - 0.008060618
-  - 0.008255813
-  - 0.00773326
+  - 0.005934715
+  - 0.008440335
+  - 0.0052716215
+  - 0.0063393745
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.017273549
-  - 0.077545494
-  - 0.07417019
-  - 0.058743887
+  - 0.019701969
+  - 0.03969276
+  - 0.077749275
+  - 0.06536673
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 180.35379
-  - 149.89209
-  - 153.17148
-  - 274.88782
+  - 215.3652
+  - 239.01703
+  - 179.90015
+  - 255.7396
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.25905073
-  - 0.09749052
-  - 0.38477105
-  - 0.49709627
+  - 0.50489306
+  - 0.34340522
+  - 0.08864052
+  - 0.09340966
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.0070046247
-  - 0.005569504
-  - 0.0068051545
-  - 0.006844393
+  - 0.008066677
+  - 0.006495253
+  - 0.0059095435
+  - 0.009459672
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.044484407
-  - 0.021871842
-  - 0.08034318
-  - 0.07665725
+  - 0.014461555
+  - 0.092611
+  - 0.019728897
+  - 0.05230989
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -6087,7 +6139,7 @@ MonoBehaviour:
   canvasLayer:
     serializedVersion: 2
     m_Bits: 1
-  rayLength: 2.25
+  rayLength: 2.75
   logFpsEachSecond: 1
   logOnlyWhenValid: 1
   OnNoseHitProcessed:
@@ -6247,6 +6299,7 @@ Transform:
   - {fileID: 1180979404}
   - {fileID: 1936272933}
   - {fileID: 854544647}
+  - {fileID: 383712321}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1847085249
@@ -6297,73 +6350,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 194.40848
-  - 285.17355
-  - 142.24411
-  - 307.91922
+  - 245.44165
+  - 136.21434
+  - 105.27926
+  - 156.01506
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.1898368
-  - 0.18823695
-  - 0.15615098
-  - 0.29742905
+  - 0.27976805
+  - 0.1739179
+  - 0.075299904
+  - 0.06324113
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.016239887
-  - 0.018121768
-  - 0.017890457
-  - 0.017363172
+  - 0.017167654
+  - 0.016201792
+  - 0.017173076
+  - 0.016346745
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.12080962
-  - 0.079207025
-  - 0.23654315
-  - 0.15600602
+  - 0.050676677
+  - 0.28371102
+  - 0.07843397
+  - 0.11956168
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 123.04974
-  - 61.003082
-  - 99.15304
-  - 72.5464
+  - 60.73404
+  - 41.598427
+  - 62.97773
+  - 85.55704
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.15944476
-  - 0.16354689
-  - 0.22873373
-  - 0.1219438
+  - 0.2948538
+  - 0.045757867
+  - 0.21420352
+  - 0.2563726
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.009379067
-  - 0.008497053
-  - 0.008260465
-  - 0.00918477
+  - 0.008115555
+  - 0.00913785
+  - 0.008594137
+  - 0.008937256
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.070301756
-  - 0.26873016
-  - 0.28718364
-  - 0.18235621
+  - 0.1634403
+  - 0.28951675
+  - 0.18729398
+  - 0.2799383
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -6390,7 +6443,7 @@ MonoBehaviour:
   reflectionScaleY: 1.2
   maxScaleX: 6.5
   maxScaleY: 3
-  totalTouchesRequired: 10
+  totalTouchesRequired: 15
   flowController: {fileID: 754450818}
 --- !u!1001 &1862703719
 PrefabInstance:
@@ -6956,7 +7009,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2023777104
 RectTransform:
   m_ObjectHideFlags: 0
