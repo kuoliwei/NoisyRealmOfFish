@@ -122,6 +122,130 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &16121172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 16121173}
+  - component: {fileID: 16121176}
+  - component: {fileID: 16121177}
+  - component: {fileID: 16121175}
+  - component: {fileID: 16121174}
+  m_Layer: 5
+  m_Name: FlipHint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &16121173
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16121172}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1059989385}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 607, y: -136}
+  m_SizeDelta: {x: 350, y: 400}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!328 &16121174
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16121172}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 7ac980bf512663c4fbb90ced997b8c9f, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 0
+  m_TargetAudioSources: []
+  m_DirectAudioVolumes: []
+  m_Url: 
+  m_EnabledAudioTracks: 
+  m_DirectAudioMutes: 
+  m_ControlledAudioTrackCount: 0
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!114 &16121175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16121172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &16121176
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16121172}
+  m_CullTransparentMesh: 1
+--- !u!114 &16121177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16121172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 355d6489f0e4e054eb72dd72abd5cf7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetImage: {fileID: 16121175}
+  hintClip: {fileID: 32900000, guid: 4f801c7fc10bc2c42b7fc1e790e2c7e0, type: 3}
+  hintChromaShader: {fileID: 4800000, guid: cf1af554e045b6b48a541dbab6376cc6, type: 3}
+  cutThreshold: 0.001
 --- !u!1 &80324463
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +668,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 294206260}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1029,8 +1153,11 @@ MonoBehaviour:
   starSpawnerUI: {fileID: 435305700}
   waterWaveController: {fileID: 1847085251}
   flowController: {fileID: 0}
-  range: 250
-  speed: 0.5
+  starSpawnRange: 450
+  starNotSpawnRange: 225
+  gapCenterAngle: 270
+  gapAngleRange: 60
+  StarSpawnSpeed: 0.5
   colorBrightnessRangeLow: 0.5
   colorBrightnessRangeHigh: 1
   scaleRangeLow: 0.5
@@ -1562,12 +1689,14 @@ MonoBehaviour:
   BookPanel: {fileID: 390365585}
   background: {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
   bookPages:
-  - {fileID: 21300000, guid: 3e0328ac7ad5aa0498ce5a41e5f1ea69, type: 3}
+  - {fileID: 21300000, guid: 4d4fc4cedfd95d5449f2ee90f3bab847, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   - {fileID: 21300000, guid: aeb4fc7cfd0d8854aa1c83f9d6548907, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
-  - {fileID: 21300000, guid: e24c7f86ca3e2e34bb52708c7997fe08, type: 3}
+  - {fileID: 21300000, guid: 94153b62d844a134dad802006fa91394, type: 3}
   - {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
+  - {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
+  - {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
   interactable: 0
   enableShadowEffect: 1
   currentPage: 0
@@ -1602,7 +1731,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3e0328ac7ad5aa0498ce5a41e5f1ea69, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4d4fc4cedfd95d5449f2ee90f3bab847, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1833,12 +1962,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonProcessor: {fileID: 1818175208}
-  sunBookAutoFlip: {fileID: 1007772760}
   flowController: {fileID: 754450818}
-  wristAboveHipThreshold: 0
-  minSwipeDistanceX: 0.12
-  maxSwipeTime: 0.15
+  OnSwipeDetected:
+    m_PersistentCalls:
+      m_Calls: []
+  minSwipeDistanceY: 0.4
+  minSwipeTime: 0.35
+  maxSwipeTime: 0.65
   minInterval: 0.02
+  debugLog: 0
 --- !u!222 &390079015
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3193,7 +3325,7 @@ GameObject:
   - component: {fileID: 693817291}
   - component: {fileID: 693817292}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: FlipSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3452,73 +3584,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 155.83954
-  - 172.14835
-  - 284.31818
-  - 267.71234
+  - 108.80109
+  - 134.24176
+  - 104.172554
+  - 188.87679
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.12521125
-  - 0.108156
-  - 0.03991711
-  - 0.09692554
+  - 0.2300088
+  - 0.09321395
+  - 0.28818598
+  - 0.28328273
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.018232904
-  - 0.019710911
-  - 0.01792046
-  - 0.016903372
+  - 0.01828767
+  - 0.01851175
+  - 0.017880514
+  - 0.016441943
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.28998762
-  - 0.03094036
-  - 0.09870212
-  - 0.19345698
+  - 0.20430359
+  - 0.22510095
+  - 0.14561303
+  - 0.07047283
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 92.88707
-  - 89.53355
-  - 57.64608
-  - 98.64648
+  - 80.3894
+  - 49.181915
+  - 80.80479
+  - 78.42881
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.29906774
-  - 0.25628522
-  - 0.17355242
-  - 0.26307607
+  - 0.24445647
+  - 0.29638317
+  - 0.20684992
+  - 0.1814448
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.009411847
-  - 0.008260359
-  - 0.008911554
-  - 0.008737241
+  - 0.009532106
+  - 0.008833025
+  - 0.008954669
+  - 0.008168395
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.27338934
-  - 0.1939376
-  - 0.16092077
-  - 0.061554044
+  - 0.09424402
+  - 0.11406432
+  - 0.13122389
+  - 0.05069116
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -3591,14 +3723,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3447d5d7b1eda7b4fac104bf0a8cfba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishIntroSprite: {fileID: 21300000, guid: 06c8a29059302a746818ed6a6d6a5a1a, type: 3}
-  calmWaterIntroSprite: {fileID: 21300000, guid: bd7da5593b3b91f439ee2159b972fcdc, type: 3}
+  transparentPageSprite: {fileID: 21300000, guid: 75693e916ed7a744f9350fb5654bf78a, type: 3}
+  calmWaterIntroSprite: {fileID: 21300000, guid: b4c17d9dde6d2c04eb7699587ad8591d, type: 3}
+  grayPageSprite: {fileID: 21300000, guid: 3f71653aab278b848ad242a0564d16ed, type: 3}
   startMode: 0
   book: {fileID: 370165805}
   bg: {fileID: 294206260}
   parentPanel: {fileID: 1687494891}
   mask: {fileID: 2043572007}
   maskText: {fileID: 961330697}
+  flipHint: {fileID: 16121172}
   endingController: {fileID: 1936272934}
   sunIntroEndingText: 
   noisyFishEndingText: "\u6C34\u8349\u7E8F\u7E5E\uFF0C\u65C5\u9014\u5306\u8FEB\u3002
@@ -3609,18 +3743,20 @@ MonoBehaviour:
   noseRayProcessor: {fileID: 345150515}
   handRayProcessor: {fileID: 349085930}
   fishModeController: {fileID: 1180979405}
-  fishDuration: 90
+  fishDuration: 30
   starSpawner: {fileID: 435305700}
   waterWave: {fileID: 1847085251}
   sunBook: {fileID: 381475265}
   sunBookAutoFlip: {fileID: 1007772760}
-  swipeDetector: {fileID: 0}
+  swipeDetector: {fileID: 383712322}
   bgmSource: {fileID: 963194229}
   sunIntroBGM: {fileID: 8300000, guid: 481195e91b6490845adb09c074f4bc04, type: 3}
   noisyFishBGM: {fileID: 8300000, guid: d0c1ef498e9c4824c916d08f97a59132, type: 3}
   calmWaterBGM: {fileID: 8300000, guid: b8ef04787feb3fd4a8b4cdfb7ddc6063, type: 3}
   bgmFadeDuration: 1.2
   bgmController: {fileID: 854544648}
+  allowFlipDelay: 5
+  calmWaterAutoEndDelay: 10
 --- !u!1 &787897505
 GameObject:
   m_ObjectHideFlags: 0
@@ -3878,6 +4014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 963194229}
   fadeDuration: 1
+  maxVolume: 0.3
 --- !u!1 &865796457
 GameObject:
   m_ObjectHideFlags: 0
@@ -4313,7 +4450,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 10
-  field of view: 60
+  field of view: 31
   orthographic: 0
   orthographic size: 0.45
   m_Depth: -1
@@ -4339,14 +4476,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12671834, y: -0, z: -0, w: 0.99193877}
-  m_LocalPosition: {x: 0, y: 2.36, z: -52.94}
+  m_LocalRotation: {x: 0.13052616, y: 0, z: 0, w: 0.9914449}
+  m_LocalPosition: {x: 0, y: 2.8, z: -57.62}
   m_LocalScale: {x: 1, y: 1.0070221, z: 0.9936801}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 693817291}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 14.56, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!82 &963194229
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4359,7 +4496,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4555,73 +4692,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 48.52993
-  - 51.84218
-  - 57.502052
-  - 76.12358
+  - 44.708427
+  - 92.85526
+  - 65.36009
+  - 87.198586
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.49083015
-  - 0.3993707
-  - 0.4524851
-  - 0.5403848
+  - 0.29674605
+  - 0.5823185
+  - 0.47350043
+  - 0.50783825
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.005934715
-  - 0.008440335
-  - 0.0052716215
-  - 0.0063393745
+  - 0.009440359
+  - 0.006103663
+  - 0.009178174
+  - 0.0051054214
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.019701969
-  - 0.03969276
-  - 0.077749275
-  - 0.06536673
+  - 0.03787411
+  - 0.09778326
+  - 0.035844807
+  - 0.031593926
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 215.3652
-  - 239.01703
-  - 179.90015
-  - 255.7396
+  - 252.50328
+  - 151.43661
+  - 223.3518
+  - 208.26477
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.50489306
-  - 0.34340522
-  - 0.08864052
-  - 0.09340966
+  - 0.49600017
+  - 0.30554146
+  - 0.49117184
+  - 0.5768326
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.008066677
-  - 0.006495253
-  - 0.0059095435
-  - 0.009459672
+  - 0.0085670855
+  - 0.0062829633
+  - 0.005398841
+  - 0.007963809
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.014461555
-  - 0.092611
-  - 0.019728897
-  - 0.05230989
+  - 0.01712782
+  - 0.021055058
+  - 0.014558822
+  - 0.043339424
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -4880,6 +5017,7 @@ RectTransform:
   - {fileID: 294206261}
   - {fileID: 1687494892}
   - {fileID: 390365585}
+  - {fileID: 16121173}
   - {fileID: 2043572008}
   - {fileID: 961330698}
   m_Father: {fileID: 0}
@@ -6142,6 +6280,9 @@ MonoBehaviour:
   rayLength: 2.75
   logFpsEachSecond: 1
   logOnlyWhenValid: 1
+  OnPersonsCloseEnough:
+    m_PersistentCalls:
+      m_Calls: []
   OnNoseHitProcessed:
     m_PersistentCalls:
       m_Calls:
@@ -6350,73 +6491,73 @@ MonoBehaviour:
   waveCountX: 4
   waveCountY: 4
   waveFrequenciesX:
-  - 245.44165
-  - 136.21434
-  - 105.27926
-  - 156.01506
+  - 108.87789
+  - 241.13182
+  - 255.67813
+  - 251.43622
   - 15.826092
   - 15.826092
   - 15.826092
   - 15.826092
   waveSpeedsX:
-  - 0.27976805
-  - 0.1739179
-  - 0.075299904
-  - 0.06324113
+  - 0.094136156
+  - 0.03168992
+  - 0.04094673
+  - 0.03040896
   - 1.222105
   - 1.222105
   - 1.222105
   - 1.222105
   waveStrengthsX:
-  - 0.017167654
-  - 0.016201792
-  - 0.017173076
-  - 0.016346745
+  - 0.018203085
+  - 0.019060481
+  - 0.019888153
+  - 0.018562103
   - 0.04764852
   - 0.04764852
   - 0.04764852
   - 0.04764852
   ampVarSpeedsX:
-  - 0.050676677
-  - 0.28371102
-  - 0.07843397
-  - 0.11956168
+  - 0.1891539
+  - 0.2773404
+  - 0.039318025
+  - 0.1369704
   - 0.012493767
   - 0.012493767
   - 0.012493767
   - 0.012493767
   waveFrequenciesY:
-  - 60.73404
-  - 41.598427
-  - 62.97773
-  - 85.55704
+  - 72.83139
+  - 78.78403
+  - 69.92634
+  - 79.40764
   - 42.02206
   - 42.02206
   - 42.02206
   - 42.02206
   waveSpeedsY:
-  - 0.2948538
-  - 0.045757867
-  - 0.21420352
-  - 0.2563726
+  - 0.21730655
+  - 0.2357609
+  - 0.15292497
+  - 0.16578251
   - 1.218049
   - 1.218049
   - 1.218049
   - 1.218049
   waveStrengthsY:
-  - 0.008115555
-  - 0.00913785
-  - 0.008594137
-  - 0.008937256
+  - 0.009843266
+  - 0.009119315
+  - 0.009546008
+  - 0.008337197
   - 0.09840919
   - 0.09840919
   - 0.09840919
   - 0.09840919
   ampVarSpeedsY:
-  - 0.1634403
-  - 0.28951675
-  - 0.18729398
-  - 0.2799383
+  - 0.17385767
+  - 0.15588248
+  - 0.27640986
+  - 0.11352848
   - 0.019452654
   - 0.019452654
   - 0.019452654
@@ -6443,7 +6584,7 @@ MonoBehaviour:
   reflectionScaleY: 1.2
   maxScaleX: 6.5
   maxScaleY: 3
-  totalTouchesRequired: 15
+  totalTouchesRequired: 10
   flowController: {fileID: 754450818}
 --- !u!1001 &1862703719
 PrefabInstance:
@@ -6567,6 +6708,10 @@ MonoBehaviour:
   bgmController: {fileID: 854544648}
   idleAfterCompletion: 5
   textVisibleDuration: 2.5
+  noisyFishBG: {fileID: 294206260}
+  book: {fileID: 370165805}
+  flowController: {fileID: 754450818}
+  sunBook: {fileID: 381475265}
 --- !u!1 &1940682921
 GameObject:
   m_ObjectHideFlags: 0

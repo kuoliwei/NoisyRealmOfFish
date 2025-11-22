@@ -4,147 +4,192 @@ using PoseTypes;
 
 public class SwipeDetector : MonoBehaviour
 {
+    [Header("來源 Processor")]
     public SkeletonDataProcessor skeletonProcessor;
-    public AutoFlip sunBookAutoFlip;
+
+    [Header("Flow Controller")]
     public NewExperienceFlowController flowController;
 
-    [Header("高度條件")]
-    public float wristAboveHipThreshold = 0.1f;
+    [System.Serializable]
+    public class SwipeEvent : UnityEngine.Events.UnityEvent { }
 
-    [Header("滑動偵測參數")]
-    public float minSwipeDistanceX = 0.12f;
-    public float maxSwipeTime = 0.5f;
+    [Header("向左滑動事件")]
+    public SwipeEvent OnSwipeDetected = new();
+
+    [Header("滑動距離（公尺）")]
+    public float minSwipeDistanceY = 0.50f;
+
+    [Header("滑動時間限制（秒）")]
+    public float minSwipeTime = 0.10f; // ★ 新增：最短滑動時間
+    public float maxSwipeTime = 0.30f; // 原本存在，但保持在這裡
+
+    [Header("判斷頻率（秒）")]
     public float minInterval = 0.02f;
 
-    private bool isSunIntroActive = true;
+    [Header("除錯")]
+    public bool debugLog = false;
 
-    // 每個人的滑動 tracking
-    private class SwipeTrack
+    private bool allowSwipe = false;
+
+    private class HandState
     {
-        public bool tracking;
-        public float startX;
-        public float startTime;
+        public bool tracking = false;
+        public float startY;
+        public float lastY;
         public float lastUpdateTime;
-        public float lastRightMostX;
+        public float startTime;
     }
 
-    private Dictionary<int, SwipeTrack> tracks = new Dictionary<int, SwipeTrack>();
+    private Dictionary<int, Dictionary<int, HandState>> personHandStates = new();
+
 
     void Start()
     {
         if (skeletonProcessor == null)
         {
-            Debug.LogError("[SwipeDetector] skeletonProcessor is null");
+            Debug.LogError("[SwipeDetector] skeletonProcessor = null");
             enabled = false;
             return;
         }
 
-        skeletonProcessor.OnHandHitProcessed.AddListener(OnHandHits);
+        skeletonProcessor.OnPersonsCloseEnough.AddListener(OnPersonsNearby);
     }
 
     void OnDestroy()
     {
         if (skeletonProcessor != null)
-            skeletonProcessor.OnHandHitProcessed.RemoveListener(OnHandHits);
+            skeletonProcessor.OnPersonsCloseEnough.RemoveListener(OnPersonsNearby);
     }
 
     public void ActivateSunIntroSwipe(bool active)
     {
-        isSunIntroActive = active;
+        allowSwipe = active;
 
-        // 每次重新啟動模式，重置所有 tracking
         if (!active)
-            tracks.Clear();
+            ResetAllTracking();
     }
 
-    private void OnHandHits(List<Vector2> hits)
+    private void OnPersonsNearby(List<PersonSkeleton> persons)
     {
-        if (!isSunIntroActive)
+        if (!allowSwipe)
             return;
 
-        if (sunBookAutoFlip == null)
+        if (persons == null || persons.Count == 0)
             return;
-
-        if (hits == null || hits.Count == 0)
-            return;
-
-        // 找最右側 UV.x
-        float rightMostX = -999f;
-        foreach (var uv in hits)
-            if (uv.x > rightMostX)
-                rightMostX = uv.x;
 
         float now = Time.time;
 
-        // 逐一檢查 SkeletonDataProcessor 現存的 joints（多人的情況下）
-        for (int personId = 0; personId < 10; personId++)
+        for (int i = 0; i < persons.Count; i++)
         {
-            Vector3[] joints = skeletonProcessor.GetLatestJoints(personId);
-            if (joints == null)
-                continue; // 該人不存在，不視為錯誤
+            var person = persons[i];
+            int pid = i;
 
-            // 準備 tracking 資料
-            if (!tracks.ContainsKey(personId))
-                tracks[personId] = new SwipeTrack();
-
-            SwipeTrack t = tracks[personId];
-
-            // 取得左右手腕與髖部高度
-            float wristR = joints[(int)JointId.RightWrist].y;
-            float wristL = joints[(int)JointId.LeftWrist].y;
-
-            float hipL = joints[(int)JointId.LeftHip].y;
-            float hipR = joints[(int)JointId.RightHip].y;
-            float hipY = (hipL + hipR) * 0.5f;
-
-            // 手必須舉高
-            bool handHigh =
-                (wristR >= hipY + wristAboveHipThreshold) ||
-                (wristL >= hipY + wristAboveHipThreshold);
-
-            if (!handHigh)
+            if (!personHandStates.TryGetValue(pid, out var handDict))
             {
-                t.tracking = false;
-                continue;
+                handDict = new Dictionary<int, HandState>();
+                personHandStates[pid] = handDict;
             }
 
-            // 更新頻率限制
-            if (now - t.lastUpdateTime < minInterval)
+            var joints = person.joints;
+            if (joints == null || joints.Length < PoseSchema.JointCount)
                 continue;
-            t.lastUpdateTime = now;
 
-            // 尚未 tracking → 紀錄起始點
-            if (!t.tracking)
+            TryDetectSwipeForHand(pid, 0, joints[(int)JointId.LeftWrist].y, now);
+            TryDetectSwipeForHand(pid, 1, joints[(int)JointId.RightWrist].y, now);
+        }
+    }
+
+
+    private void TryDetectSwipeForHand(int personId, int handIndex, float currY, float now)
+    {
+        var handDict = personHandStates[personId];
+
+        if (!handDict.TryGetValue(handIndex, out var state))
+        {
+            state = new HandState();
+            handDict[handIndex] = state;
+        }
+
+        if (state.tracking && (now - state.lastUpdateTime < minInterval))
+            return;
+
+        state.lastUpdateTime = now;
+
+        if (!state.tracking)
+        {
+            state.tracking = true;
+            state.startY = currY;
+            state.lastY = currY;
+            state.startTime = now;
+            return;
+        }
+
+        float elapsed = now - state.startTime;
+
+        // 超時 → 清除
+        if (elapsed > maxSwipeTime)
+        {
+            ResetHandTracking(personId, handIndex);
+            return;
+        }
+
+        // 方向錯誤（應該要一直往左，所以 currY < lastY）
+        if (currY > state.lastY)
+        {
+            ResetHandTracking(personId, handIndex);
+            return;
+        }
+
+        // 累計距離
+        float deltaY = state.startY - currY;
+
+        if (deltaY >= minSwipeDistanceY)
+        {
+            // ★ 新增：檢查是否太快
+            if (elapsed < minSwipeTime)
             {
-                t.tracking = true;
-                t.startX = rightMostX;
-                t.startTime = now;
-                continue;
+                // 滑得太快，不算 → 重置
+                if (debugLog)
+                    Debug.Log($"[SwipeDetector] 太快滑動（{elapsed:F3}s）→ 不算");
+                ResetHandTracking(personId, handIndex);
+                return;
             }
 
-            // 超時
-            if (now - t.startTime > maxSwipeTime)
-            {
-                t.tracking = false;
-                continue;
-            }
+            // 時間剛好在 min~max 之間 → 成功觸發
+            if (debugLog)
+                Debug.Log($"[SwipeDetector] 左滑成功: PID={personId} Hand={handIndex} (time {elapsed:F3}s)");
 
-            // 計算移動量
-            float deltaX = rightMostX - t.startX;
+            OnSwipeDetected.Invoke();
 
-            // 每一幀的移動方向必須是往左（避免往右一下又回來被當成左滑）
-            bool movingLeft = rightMostX < t.lastRightMostX;
-
-            // 儲存這一幀的位置
-            t.lastRightMostX = rightMostX;
-
-            // 判斷條件：必須連續往左 + deltaX 超過閾值
-            if (movingLeft && deltaX <= -minSwipeDistanceX)
-            {
-                Debug.Log("[SwipeDetector] Person " + personId + " LEFT swipe detected");
+            if (flowController != null)
                 flowController.TryFlipSunPage();
-                t.tracking = false;
+
+            ResetHandTracking(personId, handIndex);
+            return;
+        }
+
+        // 更新
+        state.lastY = currY;
+    }
+
+
+    private void ResetHandTracking(int personId, int handIndex)
+    {
+        if (personHandStates.TryGetValue(personId, out var handDict))
+        {
+            if (handDict.TryGetValue(handIndex, out var s))
+            {
+                s.tracking = false;
             }
+        }
+    }
+
+    private void ResetAllTracking()
+    {
+        foreach (var kv in personHandStates)
+        {
+            foreach (var h in kv.Value)
+                h.Value.tracking = false;
         }
     }
 }

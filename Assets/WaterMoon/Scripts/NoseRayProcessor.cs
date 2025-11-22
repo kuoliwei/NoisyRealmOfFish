@@ -16,6 +16,20 @@ public class NoseRayProcessor : MonoBehaviour
     private readonly Dictionary<int, Vector2> latestNoseByPerson = new();
     private readonly Dictionary<int, float> lastSeenByPerson = new();
 
+    // === Public API: 回傳目前有被鼻子射線追蹤到的體驗者數量 ===
+    // Star 模式（靜水映月）用 latestNoseHits 判斷人數
+    // Fish 模式（魚境）才用 latestNoseByPerson
+    public int PersonInRangeCount
+    {
+        get
+        {
+            if (currentMode == SpawnMode.Stars)
+                return latestNoseHits.Count;
+
+            return latestNoseByPerson.Count;
+        }
+    }
+
     [SerializeField] private SpawnMode currentMode = SpawnMode.Stars;
 
     [Header("狀態設定")]
@@ -27,11 +41,16 @@ public class NoseRayProcessor : MonoBehaviour
     [SerializeField] private WaterWaveDualController waterWaveController;
     [SerializeField] private ExperienceFlowController flowController;
 
-    [Header("Range")]
-    [SerializeField] private float range = 150f;
+    [Header("Star Spawn Range")]
+    [SerializeField] private float starSpawnRange = 450f;
+    [SerializeField] private float starNotSpawnRange = 225f; // 中心禁止生成區域
 
-    [Header("Speed")]
-    [SerializeField] private float speed = 0.5f;
+    [Header("Star Spawn Gap Settings")]
+    [SerializeField] private float gapCenterAngle = 270f;      // 缺口中心角度（面向右方為0度，逆時針）
+    [SerializeField] private float gapAngleRange = 60f;      // 缺口的半寬角度（例如40 = 整個缺口80度）
+
+    [Header("Star Spawn Speed")]
+    [SerializeField] private float StarSpawnSpeed = 0.5f;
 
     [Header("Color brightness range")]
     [SerializeField] private float colorBrightnessRangeLow = 0.5f;
@@ -97,6 +116,17 @@ public class NoseRayProcessor : MonoBehaviour
 
     private void Update()
     {
+        // === 新增：Star 模式的鼻子失聯清除 ===
+        if (currentMode == SpawnMode.Stars)
+        {
+            if (Time.time - lastReceivedTime > loseTrackSeconds)
+            {
+                latestNoseHits.Clear();   // 關鍵：清掉星星模式的鼻子資料
+                if (enableDebug)
+                    Debug.Log("[NoseRayProcessor] Star mode lost track → no person");
+            }
+        }
+
         // ---- 這段每幀都要跑（不受 isInsideRange 限制）----
         if (currentMode == SpawnMode.Fish)
         {
@@ -112,7 +142,16 @@ public class NoseRayProcessor : MonoBehaviour
         }
         // ------------------------------------------------------
         bool hasRecentData = (Time.time - lastReceivedTime) <= loseTrackThreshold;
-        isInsideRange = hasRecentData;
+
+        // 修正：Star 模式若 latestNoseHits 已空 → 必須視為不在範圍內
+        if (currentMode == SpawnMode.Stars && latestNoseHits.Count == 0)
+        {
+            isInsideRange = false;
+        }
+        else
+        {
+            isInsideRange = hasRecentData;
+        }
 
         if (isInsideRange != lastState)
         {
@@ -124,7 +163,7 @@ public class NoseRayProcessor : MonoBehaviour
         if (currentMode == SpawnMode.Stars && isInsideRange && latestNoseHits.Count > 0)
         {
             spawnTimer += Time.deltaTime;
-            float interval = 1f / Mathf.Max(speed, 0.01f);
+            float interval = 1f / Mathf.Max(StarSpawnSpeed, 0.01f);
             while (spawnTimer >= interval)
             {
                 spawnTimer -= interval;
@@ -157,8 +196,52 @@ public class NoseRayProcessor : MonoBehaviour
 
         foreach (var d in latestNoseHits)
         {
-            Vector2 screenCenter = new Vector2(d.uv.x * Screen.width, d.uv.y * Screen.height);
-            Vector2 offset = Random.insideUnitCircle * range;
+            Vector2 screenCenter = new Vector2(
+                d.uv.x * Screen.width,
+                d.uv.y * Screen.height
+            );
+
+            Vector2 offset;
+
+            // --- 甜甜圈 + 缺口隨機 ---
+            while (true)
+            {
+                // 隨機外圓內取點，但排除 starNotSpawnRange
+                offset = Random.insideUnitCircle * starSpawnRange;
+                if (offset.magnitude < starNotSpawnRange)
+                    continue;   // 在內圈 → 重抽
+
+                // 計算角度（0~360 度）
+                float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
+                if (angle < 0) angle += 360f;
+
+                // 計算缺口上下界
+                float halfGap = gapAngleRange;
+                float minAngle = gapCenterAngle - halfGap;
+                float maxAngle = gapCenterAngle + halfGap;
+
+                // 處理跨 0° 的情況（例如缺口 350°~10°）
+                bool inGap = false;
+                if (minAngle < 0 || maxAngle >= 360)
+                {
+                    float m1 = (minAngle + 360) % 360;
+                    float m2 = (maxAngle + 360) % 360;
+
+                    if (angle >= m1 || angle <= m2)
+                        inGap = true;
+                }
+                else
+                {
+                    if (angle >= minAngle && angle <= maxAngle)
+                        inGap = true;
+                }
+
+                // 如果角度落在缺口 → 重抽
+                if (!inGap)
+                    break;
+            }
+            // --- 完成 offset ---
+
             Vector2 screenPos = screenCenter + offset;
 
             Vector2 canvasPos;
@@ -179,6 +262,8 @@ public class NoseRayProcessor : MonoBehaviour
             starSpawnerUI.SpawnStar(canvasPos, baseColor, crossColor, scale);
         }
     }
+
+
 
     private void UpdateFishPositions()
     {

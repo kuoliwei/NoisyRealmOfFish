@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
 
 public enum FlipMode
 {
@@ -130,6 +131,8 @@ public class Book : MonoBehaviour
 
         CalcCurlCriticalPoints();
         InitLayout();   // ★ 最重要：重建布局避免跑位
+        Debug.Log($"[DEBUG] ResetToFirstPage() → currentPage={currentPage}");
+
     }
 
     // ========================================================================
@@ -491,6 +494,8 @@ public class Book : MonoBehaviour
 
     void Flip()
     {
+        Debug.Log($"[DEBUG] Book.Flip() 被呼叫！ currentPage(before change)={currentPage} \n呼叫堆疊：\n{new System.Diagnostics.StackTrace()}");
+
         if (mode == FlipMode.RightToLeft)
             currentPage += 2;
         else
@@ -558,5 +563,10 @@ public class Book : MonoBehaviour
             (currentPage >= 0 && currentPage < bookPages.Length)
             ? bookPages[currentPage]
             : background;
+    }
+    // 外部可呼叫的強制刷新頁面方法
+    public void RefreshPageVisual()
+    {
+        UpdateSprites();   // 呼叫 protected 的更新方法
     }
 }

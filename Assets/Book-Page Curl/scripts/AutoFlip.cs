@@ -24,8 +24,10 @@ public class AutoFlip : MonoBehaviour {
     void PageFlipped()
     {
         isFlipping = false;
+        Debug.Log($"[DEBUG] AutoFlip.PageFlipped() 被呼叫 → currentPage={ControledBook.currentPage}");
+
     }
-	public void StartFlipping()
+    public void StartFlipping()
     {
         StartCoroutine(FlipToEnd());
     }

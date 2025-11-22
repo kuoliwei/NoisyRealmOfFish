@@ -49,6 +49,13 @@ public class SkeletonDataProcessor : MonoBehaviour
     // 每人鼻子獨立平滑器
     private readonly Dictionary<int, HandSmoother> noseSmoothers = new();
 
+    // 專門給 SwipeDetector 使用：鼻子射線命中的人物清單
+    [System.Serializable]
+    public class PersonListEvent : UnityEvent<List<PersonSkeleton>> { }
+
+    [Header("足夠靠近畫面的人的事件")]
+    public PersonListEvent OnPersonsCloseEnough = new();
+
     // 鼻子射線事件
     [System.Serializable]
     public class NoseHitEvent : UnityEvent<List<NoseHitData>> { }
@@ -109,6 +116,7 @@ public class SkeletonDataProcessor : MonoBehaviour
         var seen = new HashSet<int>();
         var noseHitList = new List<NoseHitData>();
         var handHitList = new List<Vector2>();
+        var closePersons = new List<PersonSkeleton>();
 
         _recvFramesThisSec++;
         bool anyPerson = frame.persons.Count > 0;
@@ -158,6 +166,7 @@ public class SkeletonDataProcessor : MonoBehaviour
                     Vector2 uvRaw = hit.textureCoord;
                     Vector2 uvSmoothed = noseSm.Smooth(uvRaw);
                     noseHitList.Add(new NoseHitData(p, uvSmoothed));
+                    closePersons.Add(person);
 
                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.yellow, 0.1f);
                 }
@@ -225,7 +234,12 @@ public class SkeletonDataProcessor : MonoBehaviour
 
         PruneMissingPersons(seen);
 
-        if(noseHitList.Count > 0)
+        if (closePersons.Count > 0)
+        {
+            OnPersonsCloseEnough.Invoke(closePersons);
+        }
+
+        if (noseHitList.Count > 0)
         {
             noseHitList.Sort((a, b) => a.uv.x.CompareTo(b.uv.x));
             OnNoseHitProcessed?.Invoke(noseHitList);

@@ -13,6 +13,15 @@ public class ExperienceEndingController : MonoBehaviour
     [SerializeField] private float idleAfterCompletion = 5f;
     [SerializeField] private float textVisibleDuration = 2.5f;
 
+    [Header("UI Roots / Elements")]
+    [SerializeField] private GameObject noisyFishBG;
+    [SerializeField] private GameObject book;
+
+    [SerializeField] private NewExperienceFlowController flowController;
+    [SerializeField] private Book sunBook;
+
+    // 指向喧囂魚境用的 BG（跟 FlowController 的 bg 是同一個）
+
     private Coroutine currentRoutine;
 
     /// <summary>
@@ -64,6 +73,19 @@ public class ExperienceEndingController : MonoBehaviour
 
         yield return new WaitForSeconds(maskPanel.FadeDuration);
         yield return new WaitForSeconds(textVisibleDuration);
+
+        // 黑幕已完全蓋住 → 現在關閉喧囂魚境 BG
+        if (noisyFishBG != null)
+            noisyFishBG.SetActive(false);
+        // 黑幕已完全蓋住 → 現在打開SunInfo Book
+        if (book != null)
+            book.SetActive(true);
+
+        // ★ 在黑幕蓋住畫面後 → 預先更新 SunIntro 書頁
+        if (flowController != null)
+        {
+            flowController.PrepareNextSunIntroPages();
+        }
 
         // 5. 淡出 Text
         if (maskPanel != null)

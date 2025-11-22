@@ -6,6 +6,10 @@ public class BGMController : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private float fadeDuration = 1f;
 
+    [Header("程秖")]
+    [SerializeField, Range(0f, 1f)]
+    private float maxVolume = 0.3f;   // 」  Inspector 砞﹚程秖
+
     private Coroutine fadeRoutine;
 
     private void Awake()
@@ -14,6 +18,9 @@ public class BGMController : MonoBehaviour
         {
             audioSource = GetComponent<AudioSource>();
         }
+
+        // 絋玂 AudioSource 癬﹍秖ぃ穦禬筁 maxVolume
+        audioSource.volume = Mathf.Clamp(audioSource.volume, 0f, maxVolume);
     }
 
     /// <summary>
@@ -59,17 +66,22 @@ public class BGMController : MonoBehaviour
             audioSource.Play();
         }
 
-        // 睭
+        // 睭 (睭 maxVolumeτぃ琌 1f)
         time = 0;
         while (time < fadeDuration)
         {
             time += Time.deltaTime;
-            audioSource.volume = Mathf.Lerp(0f, 1f, time / fadeDuration);
+            audioSource.volume = Mathf.Lerp(0f, maxVolume, time / fadeDuration);
             yield return null;
         }
 
+        audioSource.volume = maxVolume;  // 絋玂程沧秖タ絋
         fadeRoutine = null;
     }
+
+    /// <summary>
+    /// 场㊣睭 0ㄒ堵辊挡Ю
+    /// </summary>
     public void FadeOut(float duration)
     {
         if (fadeRoutine != null)
@@ -94,5 +106,4 @@ public class BGMController : MonoBehaviour
         audioSource.Stop();
         fadeRoutine = null;
     }
-
 }

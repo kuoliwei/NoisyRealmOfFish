@@ -88,8 +88,8 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ReflectionIntensity: 0.3
-    - _ReflectionScaleX: 0.8
-    - _ReflectionScaleY: 1.2
+    - _ReflectionScaleX: 8.53
+    - _ReflectionScaleY: 2.13
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
